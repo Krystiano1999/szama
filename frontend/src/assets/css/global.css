@@ -1,0 +1,51 @@
+:root {
+    --color-dark-gray: #2E2E2E;
+    --color-light-cream: #FAF3E0;
+    --color-blue: #007BFF;
+    --color-orange: #FF935C;
+}
+
+.container-fluid{
+    overflow: hidden;
+}
+
+.text-white{
+    color: var(--color-light-cream) !important;
+    text-decoration: none;
+}
+
+/* lista */
+.fade-enter-active, .fade-leave-active {
+    transition: opacity 0.5s;
+}
+.fade-enter-from, .fade-leave-to {
+    opacity: 0;
+}
+/* menu */
+.slide-fade-enter-active, .slide-fade-leave-active {
+    transition: all 0.3s ease;
+}
+.slide-fade-enter-from, .slide-fade-leave-to {
+    transform: translateY(10px);
+    opacity: 0;
+}
+/* podsumowanie zamówienia */
+.list-enter-active, .list-leave-active {
+    transition: all 0.3s;
+}
+.list-enter-from, .list-leave-to {
+    transform: translateX(30px);
+    opacity: 0;
+}
+
+.mt-70{
+    margin-top:70px;
+}
+
+.mh100-70{
+    min-height: calc(100vh - 70px);
+}
+
+.modal-backdrop.fade.show{
+    display: none !important;
+}
