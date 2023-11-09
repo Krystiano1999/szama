@@ -18,8 +18,9 @@ Route::get('/', function () {
 });
 
 
-Route::get('/dodaj-uzytkownika', function () {
-    return view('dodaj_uzytkownika');
-});
 
+Route::get('/dodaj-uzytkownika', [UzytkownikController::class, 'dodajUzytkownikaForm']);
 Route::post('/dodaj-uzytkownika', [UzytkownikController::class, 'dodajUzytkownika'])->name('dodaj-uzytkownika');
+
+Route::get('/logowanie', [UzytkownikController::class, 'pokazFormularzLogowania']);
+Route::post('/zaloguj-uzytkownika', [UzytkownikController::class, 'zalogujUzytkownika'])->name('zaloguj-uzytkownika');
