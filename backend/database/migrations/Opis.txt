@@ -1,0 +1,24 @@
+Tabela Restauracje:
+
+ID_Restauracji (unikalny identyfikator restauracji)
+Nazwa_Restauracji
+Wojewodztwo
+Miasto
+Adres
+Opis (krótki opis restauracji)
+
+Tabela Menu:
+ID_Pozycji_Menu (unikalny identyfikator dania/menu)
+ID_Restauracji (powiązane z ID_Restauracji w tabeli Restauracje)
+Nazwa_Pozycji (nazwa dania/menu)
+Opis_Pozycji (opis dania/menu)
+Cena
+
+Tabela Kategorie:
+ID_Kategorii (unikalny identyfikator kategorii, np. dania główne, przystawki, napoje)
+Nazwa_Kategorii
+
+Tabela Powiązania_Kategorie_Menu:
+ID_Powiazania (unikalny identyfikator powiązania)
+ID_Pozycji_Menu (powiązane z ID_Pozycji_Menu w tabeli Menu)
+ID_Kategorii (powiązane z ID_Kategorii w tabeli Kategorie)
