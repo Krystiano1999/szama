@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\UzytkownikController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,3 +16,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::get('/dodaj-uzytkownika', function () {
+    return view('dodaj_uzytkownika');
+});
+
+Route::post('/dodaj-uzytkownika', [UzytkownikController::class, 'dodajUzytkownika'])->name('dodaj-uzytkownika');
