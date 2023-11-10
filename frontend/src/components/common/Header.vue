@@ -37,27 +37,27 @@
               <div v-if="!isLoginMode">
                 <div class="mb-3">
                   <label for="email" class="form-label">Adres Email</label>
-                  <input type="email" class="form-control" id="email" required>
+                  <input type="email" class="form-control" v-model="formData.email" id="email" required>
                 </div>
                 <div class="mb-3">
                   <label for="tel" class="form-label">Numer Telefonu</label>
-                  <input type="tel" class="form-control" id="tel" required>
+                  <input type="tel" class="form-control" v-model="formData.phone_number" id="tel" required>
                 </div>
                 <div class="mb-3">
                   <label for="address" class="form-label">Adres</label>
-                  <input type="text" class="form-control" id="address" required>
+                  <input type="text" class="form-control" v-model="formData.address" id="address" required>
                 </div>
               </div>
               <div class="mb-3">
                 <label for="username" class="form-label">Nazwa Użytkownika</label>
-                <input type="text" class="form-control" id="username" required>
+                <input type="text" class="form-control" v-model="formData.username" id="username" required>
               </div>
               <div class="mb-3">
                 <label for="password" class="form-label">Hasło</label>
-                <input type="password" class="form-control" id="password" required>
+                <input type="password" class="form-control" v-model="formData.password" id="password" required>
               </div>
               <button type="submit" class="btn btn-primary">{{ isLoginMode ? 'Zaloguj się' : 'Zarejestruj' }}</button>
-            </form>
+          </form>
           </div>
            <div class="modal-footer">
             <button type="button" class="btn btn-link" @click="toggleMode">{{ isLoginMode ? 'Załóż konto' : 'Masz już konto? Zaloguj się' }}</button>
@@ -70,12 +70,21 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: 'AppHeader',
   data() {
     return {
-      isLoginMode: true
-    }
+      isLoginMode: true,
+      formData: {
+        username: '',
+        email: '',
+        phone_number:'',
+        address: '',
+        password:''
+      }
+    };
   },
   methods: {
     toggleMode() {
@@ -83,13 +92,33 @@ export default {
     },
     loginUser() {
       // Logika logowania
+      axios.post('http://localhost:8000/api/login',this.formData)
+        .then(response => {
+          console.log(response.data);
+          // Dodaj kod obsługi sukcesu, np. przekierowanie do innej strony
+        })
+        .catch(error => {
+          console.error(error.response.data);
+          
+          // Dodaj kod obsługi błędu, np. wyświetlenie komunikatu dla użytkownika
+        });
     },
     registerUser() {
       // Logika rejestracji
+      axios.post('http://localhost:8000/api/register', this.formData)
+        .then(response => {
+          console.log(response.data);
+          // Dodaj kod obsługi sukcesu, np. przekierowanie do innej strony
+        })
+        .catch(error => {
+          console.error(error.response.data);
+          // Dodaj kod obsługi błędu, np. wyświetlenie komunikatu dla użytkownika
+        });
     }
   }
 }
 </script>
+
 
 <style scoped>
   header {

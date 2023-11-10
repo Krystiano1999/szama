@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UzytkownikController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -19,8 +19,3 @@ Route::get('/', function () {
 
 
 
-Route::get('/dodaj-uzytkownika', [UzytkownikController::class, 'dodajUzytkownikaForm']);
-Route::post('/dodaj-uzytkownika', [UzytkownikController::class, 'dodajUzytkownika'])->name('dodaj-uzytkownika');
-
-Route::get('/logowanie', [UzytkownikController::class, 'pokazFormularzLogowania']);
-Route::post('/zaloguj-uzytkownika', [UzytkownikController::class, 'zalogujUzytkownika'])->name('zaloguj-uzytkownika');
