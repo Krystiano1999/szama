@@ -17,4 +17,24 @@ class RestaurantController extends Controller
 
         return response()->json(['restaurants' => $restaurants]);
     }
+
+    public function getRestaurants()
+{
+    // Pobierz wszystkie restauracje bez filtra miasta
+    $restaurants = Restauracje::all();
+
+    // Iteruj przez kolekcję i pobierz wybrane pola
+    $restaurantData = $restaurants->map(function ($restaurant) {
+        return [
+            'ID_Restauracji' => $restaurant->ID_Restauracji,
+            'Nazwa_Restauracji' => $restaurant->Nazwa_Restauracji,
+            'Wojewodztwo' => $restaurant->Wojewodztwo,
+            'Miasto' => $restaurant->Miasto,
+            'Adres' => $restaurant->Adres,
+        ];
+    });
+
+    return response()->json(['restaurants' => $restaurantData]);
+}
+    
 }
