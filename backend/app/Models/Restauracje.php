@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Restauracje extends Model
 {
     use HasFactory;
-
+    protected $primaryKey = 'ID_Restauracji';
     protected $fillable = [
         'Nazwa_Restauracji',
         'Wojewodztwo',

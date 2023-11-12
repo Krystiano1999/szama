@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RestaurantController;
-
+use App\Http\Controllers\RestaurantMenuController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,3 +33,5 @@ Route::post('/logout', [AuthController::class, 'logout']);
 Route::post('/get-restaurants-by-city', [RestaurantController::class, 'getRestaurantsByCity']);
 
 Route::get('/get-restaurants', [RestaurantController::class, 'getRestaurants']);
+
+Route::get('/restaurant/{restaurantId}/menu', [RestaurantMenuController::class, 'getCategoriesAndMenu']);
