@@ -5,6 +5,40 @@
     --color-orange: #FF935C;
 }
 
+body{
+    margin:0 !important;
+    background-color: var(--color-light-cream);
+}
+
+/* Stylowanie paska przewijania dla WebKit (Chrome, Safari, nowsze wersje Opery) */
+::-webkit-scrollbar {
+    width: 10px;
+    background-color: var(--color-light-cream);
+}
+
+/* Stylowanie kciuka (części przewijanej) paska przewijania */
+::-webkit-scrollbar-thumb {
+    background-color: var(--color-dark-gray);
+    /* border-radius: 5px; */
+}
+
+/* Stylowanie kciuka paska przewijania przy najechaniu lub przewijaniu */
+::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-blue);
+}
+
+/* Stylowanie tła paska przewijania */
+::-webkit-scrollbar-track {
+    background-color: var(--color-light-cream);
+    /* border-radius: 5px; */
+}
+
+/* Stylowanie paska przewijania dla Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-dark-gray) var(--color-light-cream);
+}  
+
 .container-fluid{
     overflow: hidden;
 }
@@ -43,9 +77,21 @@
 }
 
 .mh100-70{
-    min-height: calc(100vh - 70px);
+    min-height: calc(100vh - 110px);
 }
 
 .modal-backdrop.fade.show{
     display: none !important;
 }
+
+@media (min-width:1400px) {
+    /* .container{
+      max-width:1600px;
+    } */
+    .fs-1{
+      font-size: 4.5rem !important;
+    }
+    .fs-2{
+      font-size: 3.25rem !important;
+    } 
+  }

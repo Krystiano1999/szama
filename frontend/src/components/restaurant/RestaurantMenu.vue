@@ -1,18 +1,22 @@
 <template>
-  <div class="col-md-9 restaurant-menu">
-    <h3 v-if="restaurant">{{ restaurant.name }} Menu</h3>
-    <div class="menu-grid" v-if="restaurant">
-      <div class="menu-item position-relative" v-for="dish in restaurant.menu" :key="dish.id" @mouseenter="hovering = dish.id" @mouseleave="hovering = null">
-        <img :src="getImageUrl(restaurant.name, dish.imageUrl)" :alt="dish.name">
-        <div class="menu-item-content">
-            <div class="menu-item-header">
+  <div class="col-md-7 restaurant-menu">
+    <div v-if="restaurant">
+      <div v-for="(dishes, category) in filteredMenu" :key="category">
+        <!-- <h4 class="mt-2">{{ category }}</h4> -->
+        <div class="menu-items menu-grid mt-3">
+          <div class="menu-item position-relative" v-for="dish in dishes" :key="dish.id" @mouseenter="hovering = dish.id" @mouseleave="hovering = null">
+            <img :src="getImageUrl(restaurant.name, dish.imageUrl)" :alt="dish.name">
+            <div class="menu-item-content">
+              <div class="menu-item-header">
                 <h5>{{ dish.name }}</h5>
                 <span class="menu-item-price">{{ formatCurrency(dish.price) }}</span>
-            </div>
-            <div v-show="hovering === dish.id" class="menu-item-quantity-box">
+              </div>
+              <div v-show="hovering === dish.id" class="menu-item-quantity-box">
                 <input type="number" v-model.number="localQuantities[dish.id]" min="1" class="quantity-input">
+              </div>
+              <button class="btn btn-primary" :class="{ 'hovered': hovering === dish.id }" @click="addItem(dish)">Add to cart</button>
             </div>
-            <button class="btn btn-primary" :class="{ 'hovered': hovering === dish.id }" @click="addItem(dish)">Add to cart</button>
+          </div>
         </div>
       </div>
     </div>
@@ -24,7 +28,8 @@
 <script>
 export default {
   props: {
-    restaurant: Object
+    restaurant: Object,
+    activeCategory: String
   },
   data() {
     return {
@@ -32,16 +37,33 @@ export default {
       localQuantities: {}
     };
   },
+  computed: {
+    filteredMenu() {
+    if (!this.activeCategory) {
+      // Złącz wszystkie dania w jedną listę, jeśli nie ma aktywnej kategorii
+      let allDishes = [];
+      for (let category in this.restaurant.menu) {
+        allDishes = allDishes.concat(this.restaurant.menu[category]);
+      }
+      return { 'Wszystkie': allDishes };
+    }
+    return { [this.activeCategory]: this.restaurant.menu[this.activeCategory] };
+  }
+  },
   methods: {
     addItem(dish) {
       const quantityToAdd = this.localQuantities[dish.id] || 1;
       this.$emit('addItem', { ...dish, quantity: quantityToAdd });
       this.localQuantities[dish.id] = 1;
     },
-    created() {
-        this.restaurant.menu.forEach(dish => {
-        this.$set(this.localQuantities, dish.id, 1);
+    mounted() {
+      if (this.restaurant && this.restaurant.menu) {
+        Object.keys(this.restaurant.menu).forEach(category => {
+          this.restaurant.menu[category].forEach(dish => {
+            this.$set(this.localQuantities, dish.id, 1);
+          });
         });
+      }
     },
     formatCurrency(value) {
       // formatowanie ceny jako waluty 

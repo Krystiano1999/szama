@@ -1,5 +1,5 @@
 <template>
-  <div class="order-summary position-absolute">
+  <div class="order-summary col-md-2 pe-md-0">
     <h3 class="fs-4">Podsumowanie zamówienia</h3>
     <transition-group name="list" tag="ul">
       <li v-for="(item, index) in groupedOrderItems" :key="index">
@@ -10,6 +10,7 @@
     <div class="total-price">
       Łączna suma: {{ formatCurrency(totalPrice) }}
     </div>
+    <button class="order-button">Zamów</button>
   </div>
 </template>
 
@@ -51,13 +52,8 @@ export default {
 </script>
 
 <style scoped>
-.order-summary {
-    right: -1.5rem;
-    max-width: 15%;
-}
-
 .order-summary h3 {
-  background-color: var(--color-blue);
+  background-color: var(--color-orange);
   color: var(--color-light-cream);
   padding: 10px;
 }
@@ -86,5 +82,19 @@ export default {
 .order-summary .total-price {
   font-weight: bold;
   margin-top: 10px;
+}
+.order-summary .order-button {
+  background-color: var(--color-blue);
+  color: var(--color-light-cream); 
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  font-size: 1rem;
+}
+
+.order-summary .order-button:hover {
+  background-color: var(--color-dark-gray); 
 }
 </style>

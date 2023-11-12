@@ -1,12 +1,13 @@
 <template>
-  <div class="col-md-3 restaurant-list">
-    <ul>
+  <div class="col-md-2 restaurant-list px-md-0">
+    <ul v-if="restaurants && restaurants.length > 0">
       <li v-for="restaurant in restaurants" :key="restaurant.id"
           :class="{ active: restaurant.id === selectedRestaurant?.id }"
           @click="selectRestaurant(restaurant)">
         {{ restaurant.name }}
       </li>
     </ul>
+    <div v-else class="no-restaurants">Nie znaleziono resturacji w Twojej miejscowości</div>
   </div>
 </template>
 
@@ -36,6 +37,7 @@ export default {
   background-color: var(--color-light-cream); 
   transition: background-color 0.3s, color 0.2s;
   font-size:21px;
+  border: 1px solid var(--color-dark-gray);
 }
 
 .restaurant-list li:hover,
@@ -47,6 +49,12 @@ export default {
 
 .restaurant-list li:not(.active):hover {
   background-color: var(--color-light-cream);
+  color: var(--color-dark-gray);
+}
+
+.no-restaurants{
+  padding: 10px;
+  font-size: 21px;
   color: var(--color-dark-gray);
 }
 </style>

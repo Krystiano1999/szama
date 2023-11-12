@@ -20,10 +20,7 @@ export default {
 </script>
 
 <style>
-body{
-  margin:0 !important;
-  background-color: var(--color-light-cream);
-}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -31,19 +28,6 @@ body{
   text-align: center;
   color: var(--color-dark-gray);
 }
-.container-fluid{
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-}
-@media (min-width:1400px) {
-  /* .container{
-    max-width:1600px;
-  } */
-  .fs-1{
-    font-size: 4.5rem !important;
-  }
-  .fs-2{
-    font-size: 3.25rem !important;
-  } 
-}
+
+
 </style>

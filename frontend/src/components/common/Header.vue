@@ -1,6 +1,6 @@
 <template>
   <header class="container-fluid d-flex align-items-center fixed-top py-2">
-    <div class="container d-flex align-items-center justify-content-between">
+    <div class="w-100 d-flex align-items-center justify-content-between">
       <router-link to="/" class="text-white">
         <img class="img-fluid rounded logo" src="@/assets/images/logo.png" alt="Logo" />
         SZAMA
