@@ -1,21 +1,21 @@
 <template>
   <div id="app">
-    <HeaderComponent />
+    
     <router-view></router-view>
-    <FooterComponent />
+    
   </div>
 </template>
 
 <script>
-import HeaderComponent from '@/components/common/Header.vue';
-import FooterComponent from '@/components/common/Footer.vue';
+// import HeaderComponent from '@/components/common/Header.vue';
+// import FooterComponent from '@/components/common/Footer.vue';
 
 export default {
   name: 'App',
-  components: {
+  /* components: {
     HeaderComponent,
     FooterComponent
-  }
+  } */
 }
 </script>
 

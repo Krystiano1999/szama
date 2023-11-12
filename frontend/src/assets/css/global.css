@@ -85,13 +85,10 @@ body{
 }
 
 @media (min-width:1400px) {
-    /* .container{
-      max-width:1600px;
-    } */
-    .fs-1{
-      font-size: 4.5rem !important;
-    }
-    .fs-2{
-      font-size: 3.25rem !important;
-    } 
-  }
+.fs-1{
+    font-size: 4.5rem !important;
+}
+.fs-2{
+    font-size: 3.25rem !important;
+} 
+}

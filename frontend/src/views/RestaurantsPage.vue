@@ -1,4 +1,5 @@
 <template>
+  <HeaderComponent />
   <div class="container-fluid position-relative mt-70 mh100-70">
     <div class="row">
       <SearchBar @search="searchRestaurants" />
@@ -21,9 +22,12 @@
       <OrderSummary :orderItems="orderItems" @removeItem="removeItemFromOrder" />
     </div>
   </div>
+  <FooterComponent />
 </template>
 
 <script>
+import HeaderComponent from '@/components/common/Header.vue';
+import FooterComponent from '@/components/common/Footer.vue';
 import SearchBar from '@/components/common/SearchBar.vue';
 import RestaurantList from '@/components/restaurant/RestaurantList.vue';
 import RestaurantMenu from '@/components/restaurant/RestaurantMenu.vue';
@@ -33,6 +37,8 @@ import RestaurantCategory from '@/components/restaurant/RestaurantCategory.vue';
 
 export default {
   components: {
+    HeaderComponent,
+    FooterComponent,
     SearchBar,
     RestaurantList,
     RestaurantMenu,
