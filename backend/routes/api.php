@@ -31,4 +31,5 @@ Route::post('/logout', [AuthController::class, 'logout']);
 
 
 Route::post('/get-restaurants-by-city', [RestaurantController::class, 'getRestaurantsByCity']);
+
 Route::get('/get-restaurants', [RestaurantController::class, 'getRestaurants']);

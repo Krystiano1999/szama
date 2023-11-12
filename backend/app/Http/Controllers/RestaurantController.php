@@ -4,8 +4,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Restauracje; // Dodaj odpowiednią ścieżkę do modelu Restauracje
+use App\Models\Restauracje; 
 
+//Zwraca ona wszystkie restauracje z danego miasta
 class RestaurantController extends Controller
 {
     public function getRestaurantsByCity(Request $request)
@@ -17,7 +18,7 @@ class RestaurantController extends Controller
 
         return response()->json(['restaurants' => $restaurants]);
     }
-
+//Zwraca ona wszystkie restauracje oraz ich dokładny adres
     public function getRestaurants()
 {
     // Pobierz wszystkie restauracje bez filtra miasta
