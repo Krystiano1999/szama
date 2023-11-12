@@ -1,0 +1,48 @@
+Tabela Restauracje:
+ID_Restauracji: Unikalny identyfikator restauracji.
+Nazwa_Restauracji: Nazwa restauracji.
+Wojewodztwo: Województwo, w którym znajduje się restauracja.
+Miasto: Miasto, w którym znajduje się restauracja.
+Adres: Adres restauracji.
+Opis: Krótki opis restauracji.
+
+Tabela Menu:
+ID_Pozycji_Menu: Unikalny identyfikator dania/menu.
+ID_Restauracji: Powiązane z ID_Restauracji w tabeli Restauracje.
+Nazwa_Pozycji: Nazwa dania/menu.
+Opis_Pozycji: Opis dania/menu.
+Cena: Cena dania/menu.
+
+Tabela Kategorie:
+ID_Kategorii: Unikalny identyfikator kategorii, np. dania główne, przystawki, napoje.
+Nazwa_Kategorii: Nazwa kategorii.
+
+Tabela Powiązania_Kategorie_Menu:
+ID_Powiazania: Unikalny identyfikator powiązania.
+ID_Pozycji_Menu: Powiązane z ID_Pozycji_Menu w tabeli Menu.
+ID_Kategorii: Powiązane z ID_Kategorii w tabeli Kategorie.
+
+Tabela Uzytkownicy:
+ID_Uzytkownika: Unikalny identyfikator użytkownika.
+Username: Nazwa użytkownika (unikalna).
+Email: Adres e-mail użytkownika (unikalny).
+Phone_Number: Numer telefonu użytkownika (opcjonalny, może być pusty).
+Address: Adres zamieszkania użytkownika (opcjonalny, może być pusty).
+Email_Verified_At: Data weryfikacji adresu e-mail (może być puste).
+Password: Hasło użytkownika.
+Remember_Token: Token do pamiętania sesji.
+
+
+Tabela Zamowienia:
+ID_Zamowienia: Unikalny identyfikator zamówienia.
+ID_Uzytkownika: Powiązane z ID_Uzytkownika w tabeli Uzytkownicy.
+Status_Zamowienia: Status zamówienia (otwarty, zamknięty).
+Cena: Całkowita cena zamówienia.
+created_at, updated_at: Daty utworzenia i ostatniej aktualizacji rekordu.
+
+Tabela SzczegolyZamowienia:
+ID_Szczegolu: Unikalny identyfikator szczegółów zamówienia.
+ID_Zamowienia: Powiązane z ID_Zamowienia w tabeli Zamowienia.
+ID_Pozycji_Menu: Powiązane z ID_Pozycji_Menu w tabeli Menu.
+Ilosc: Ilość danej pozycji w zamówieniu.
+Cena: Cena jednostkowa danej pozycji.
