@@ -28,7 +28,7 @@
 <script>
 import HeaderComponent from '@/components/common/Header.vue';
 import FooterComponent from '@/components/common/Footer.vue';
-import SearchBar from '@/components/common/SearchBar.vue';
+import SearchBar from '@/components/common/SearchBar.vue'; 
 import RestaurantList from '@/components/restaurant/RestaurantList.vue';
 import RestaurantMenu from '@/components/restaurant/RestaurantMenu.vue';
 import OrderSummary from '@/components/restaurant/OrderSummary.vue';

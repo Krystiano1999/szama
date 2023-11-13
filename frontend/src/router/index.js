@@ -4,6 +4,9 @@ import RestaurantsPage from '@/views/RestaurantsPage.vue'
 import AdminLogin from '@/views/admin/AdminLogin.vue'
 import AdminPage from '@/views/AdminPage.vue'
 import DashboardComponent from '@/components/admin/DashboardAdmin.vue'
+import CategoryManagement from '@/components/admin/CategoryManagement.vue'
+import MenuManagement from '@/components/admin/MenuManagement.vue'
+import OrdersManagement from '@/components/admin/OrdersManagement.vue'
 
 const routes = [
   {
@@ -25,15 +28,15 @@ const routes = [
   {
     path: '/admin',
     name: 'Admin',
+    redirect: '/admin/dashboard', // Domyślne przekierowanie na dashboard
     component: AdminPage,
     meta: { requiresAuth: true },
-    // Możesz dodać dziecięce trasy jeśli masz różne sekcje w panelu admina
     children: [
-      // trasy podrzędne
-      { path: 'dashboard', component: DashboardComponent },
-      // { path: 'orders', component: OrdersManagementComponent },
-      // { path: 'menu', component: MenuManagementComponent },
-      // ... inne trasy
+      { path: 'dashboard', name: 'Dashboard', component: DashboardComponent },
+      { path: 'category-management', name: 'CategoryManagement', component: CategoryManagement },
+      { path: 'menu-management', name: 'MenuManagement', component: MenuManagement },
+      { path: 'orders-management', name: 'OrdersManagement', component: OrdersManagement },
+      // ... inne trasy podrzędne
     ]
   },
   // Dodaj kolejne trasy w miarę potrzeb

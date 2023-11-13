@@ -33,44 +33,62 @@
         </div>
       </div>
     </div>
-    
-    <h2>Recent menu items</h2>
-    <table class="menu-items">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Image</th>
-          <th>Name</th>
-          <th>Category</th>
-          <th>Price</th>
-          <th>Available?</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Przykładowe wpisy, powinny być wygenerowane dynamicznie -->
-        <tr>
-          <td>#1</td>
-          <td><img src="path-to-dish-image" alt="Spaghetti with Bread Dish"></td>
-          <td>Spaghetti with Bread Dish</td>
-          <td>Foods</td>
-          <td>2000.00</td>
-          <td>Available</td>
-        </tr>
-        <!-- Powtórz dla każdego elementu menu -->
-      </tbody>
-    </table>
+
+    <h2 class="mt-5">Zarządzanie Restauracją</h2>
+    <div class="restaurant-management">
+      <form class="row" @submit.prevent="saveRestaurant">
+        <div class="form-group col-md-6">
+          <label for="restaurant-name">Nazwa Restauracji</label>
+          <input type="text" id="restaurant-name" v-model="restaurant.name" placeholder="Wpisz nazwę restauracji">
+        </div>
+        <div class="form-group col-md-6">
+          <label for="restaurant-region">Województwo</label>
+          <input type="text" id="restaurant-region" v-model="restaurant.region" placeholder="Wpisz województwo">
+        </div>
+        <div class="form-group col-md-6">
+          <label for="restaurant-city">Miasto</label>
+          <input type="text" id="restaurant-city" v-model="restaurant.city" placeholder="Wpisz miasto">
+        </div>
+        <div class="form-group col-md-6">
+          <label for="restaurant-address">Adres</label>
+          <input type="text" id="restaurant-address" v-model="restaurant.address" placeholder="Wpisz adres">
+        </div>
+        <div class="form-group">
+          <label for="restaurant-description">Opis</label>
+          <textarea id="restaurant-description" v-model="restaurant.description" placeholder="Wpisz opis restauracji"></textarea>
+        </div>
+        <button type="submit" class="save-button">Zapisz</button>
+      </form>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "DashboardAdmin"
+  name: "DashboardAdmin",
+  data() {
+    return {
+      restaurant: {
+        name: '',
+        region: '',
+        city: '',
+        address: '',
+        description: '',
+      }
+    };
+  },
+  methods: {
+    saveRestaurant() {
+      // Logika zapisywania restauracji
+      console.log(this.restaurant);
+      // Możesz wysłać te dane do serwera za pomocą np. axios
+    }
+  }
 };
 </script>
 
 <style>
 .dashboard {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   padding: 20px;
 }
 
@@ -96,17 +114,17 @@ export default {
 
 .card-content p {
   margin: 0;
-  color: #888;
+  color: var(--color-dark-gray);
 }
 
 .card-content h2 {
   margin: 0;
-  color: #333;
+  color:  var(--color-dark-gray);
 }
 
 button {
-  background-color: #007bff;
-  color: white;
+  background-color: var(--color-blue);
+  color:  white;
   border: none;
   padding: 10px;
   border-radius: 5px;
@@ -114,7 +132,7 @@ button {
 }
 
 button:hover {
-  background-color: #0056b3;
+  background-color: var(--color-orange);
 }
 
 .dashboard .menu-items {
@@ -124,7 +142,7 @@ button:hover {
 
 .dashboard .menu-items th,
 .dashboard .menu-items td {
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-blue);
   padding: 8px;
   text-align: left;
 }
@@ -134,7 +152,7 @@ button:hover {
 }
 
 .dashboard .menu-items tr:nth-child(even) {
-  background-color: #f9f9f9;
+  background-color:  var(--color-light-cream);
 }
 
 .dashboard .menu-items img {
@@ -142,6 +160,65 @@ button:hover {
   height: 50px;
   border-radius: 50%;
   object-fit: cover;
+}
+
+.restaurant-management {
+  background-color: white;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.restaurant-management .form-group {
+  margin-bottom: 15px;
+}
+
+.restaurant-management label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.restaurant-management input[type="text"],
+.restaurant-management textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.restaurant-management textarea {
+  resize: vertical;
+  height: 100px;
+}
+
+.restaurant-management button {
+  background-color: var(--color-blue);
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.restaurant-management button:hover {
+  background-color: var(--color-orange);
+}
+
+.form-group label {
+  font-weight: bold;
+  color: var(--color-dark-gray);
+}
+
+.form-group input[type="text"],
+.form-group textarea {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid var(--color-dark-gray);
+  border-radius: 4px;
+  font-size: 1rem;
 }
 
 </style>

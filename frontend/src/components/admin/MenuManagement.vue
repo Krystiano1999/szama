@@ -16,7 +16,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, index) in menuItems" :key="item.id">
+          <tr v-for="item in menuItems" :key="item.id">
             <td>{{ item.id }}</td>
             <td><img :src="item.image" alt="Menu item" class="menu-item-image"/></td>
             <td>{{ item.name }}</td>
@@ -98,13 +98,7 @@
     background-color: #4CAF50; /* Zielony */
   }
   
-  .edit-btn {
-    /* Stylizacja przycisku edycji */
-  }
   
-  .delete-btn {
-    /* Stylizacja przycisku usuwania */
-  }
   
   /* Dalsze style... */
   </style>
