@@ -25,11 +25,13 @@ export default {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  padding: 20px;
-  border-radius: 5px;
+  padding: 30px;
+  border-radius: 25px;
   text-align: center;
   min-width: 300px;
   z-index: 1000;
+  font-size: 25px;
+  font-weight:600;
 }
 .notification.success {
   background-color: white;
