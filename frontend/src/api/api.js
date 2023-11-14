@@ -11,3 +11,7 @@ export const loginUser = (formData) => {
 export const registerUser = (formData) => {
   return apiClient.post('/register', formData);
 };
+
+export const logoutUser = () => {
+  return apiClient.post('/logout');
+};

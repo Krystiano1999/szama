@@ -11,13 +11,22 @@
         </button>
         <div>
           <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
+             <ul class="navbar-nav">
               <li class="nav-item text-white">
                 <router-link to="/restaurants" class="nav-link text-white">Restauracje</router-link>
               </li>
-              <li class="nav-item text-white">
-                <a v-if="!loggedInUser" class="nav-link text-white" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Zaloguj się</a>
-                <span v-else class="nav-link text-white">Witaj, {{ loggedInUser.username }}</span>
+              <li class="nav-item text-white" v-if="!loggedInUser">
+                <a class="nav-link text-white" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Zaloguj się</a>
+              </li>
+              <li class="nav-item dropdown" v-else>
+                <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Witaj, {{ loggedInUser.username }}
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li><a class="dropdown-item" href="#">Profil</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="#" @click="logout">Wyloguj</a></li>
+                </ul>
               </li>
             </ul>
           </div>
@@ -30,6 +39,8 @@
 
 <script>
 import LoginModal from '@/components/auth/LoginModal.vue';
+import { logoutUser } from '@/api/api';
+import { showSuccessMessage, showErrorMessage } from '@/components/notification/NotificationHelper';
 
 export default {
   name: 'AppHeader',
@@ -38,13 +49,29 @@ export default {
   },
   data() {
     return {
-      loggedInUser: null
+      loggedInUser: null,
+      messageContent: '',
+      messageType: '',
     };
   },
   methods: {
     handleUserLogin(userInfo) {
       this.loggedInUser = userInfo;
+    },
+    async logout() {
+      try {
+        const response = await logoutUser();
+        // Tu możesz obsłużyć odpowiedź z serwera, np. usunąć token z pamięci, przekierować itd.
+        console.log(response.data.message); // Wyświetli wiadomość "Użytkownik wylogowany"
+        showSuccessMessage("Pomyślnie wylogowano");
+        // Przekierowanie do strony głównej, ekranu logowania itp.
+        this.$router.push('/');
+      } catch (error) {
+        //console.error("Wystąpił błąd podczas wylogowywania:", error.response);
+        showErrorMessage("Wystąpił błąd podczas wylogowywania:", error.response);
+      }
     }
+    
   }
 }
 </script>

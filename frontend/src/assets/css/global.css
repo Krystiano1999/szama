@@ -40,7 +40,7 @@ body{
 }  
 
 .container-fluid{
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 .text-white{
