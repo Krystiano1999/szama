@@ -16,80 +16,39 @@
                 <router-link to="/restaurants" class="nav-link text-white">Restauracje</router-link>
               </li>
               <li class="nav-item text-white">
-                <a class="nav-link text-white" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Zaloguj się</a>
+                <a v-if="!loggedInUser" class="nav-link text-white" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Zaloguj się</a>
+                <span v-else class="nav-link text-white">Witaj, {{ loggedInUser.username }}</span>
               </li>
             </ul>
           </div>
         </div>
       </nav>
     </div>
-
-    <!-- Modal -->
-    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="loginModalLabel">{{ isLoginMode ? 'Zaloguj się' : 'Załóż konto' }}</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <form @submit.prevent="isLoginMode ? loginUser() : registerUser()">
-              <div v-if="!isLoginMode">
-                <div class="mb-3">
-                  <label for="email" class="form-label">Adres Email</label>
-                  <input type="email" class="form-control" id="email" required>
-                </div>
-                <div class="mb-3">
-                  <label for="tel" class="form-label">Numer Telefonu</label>
-                  <input type="tel" class="form-control" id="tel" required>
-                </div>
-                <div class="mb-3">
-                  <label for="address" class="form-label">Adres</label>
-                  <input type="text" class="form-control" id="address" required>
-                </div>
-              </div>
-              <div class="mb-3">
-                <label for="username" class="form-label">Nazwa Użytkownika</label>
-                <input type="text" class="form-control" id="username" required>
-              </div>
-              <div class="mb-3">
-                <label for="password" class="form-label">Hasło</label>
-                <input type="password" class="form-control" id="password" required>
-              </div>
-              <button type="submit" class="btn btn-primary">{{ isLoginMode ? 'Zaloguj się' : 'Zarejestruj' }}</button>
-            </form>
-          </div>
-           <div class="modal-footer">
-            <button type="button" class="btn btn-link" @click="toggleMode">{{ isLoginMode ? 'Załóż konto' : 'Masz już konto? Zaloguj się' }}</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    
+    <LoginModal @user-logged-in="handleUserLogin"/>
   </header>
 </template>
 
 <script>
+import LoginModal from '@/components/auth/LoginModal.vue';
+
 export default {
   name: 'AppHeader',
+  components: {
+    LoginModal
+  },
   data() {
     return {
-      isLoginMode: true
-    }
+      loggedInUser: null
+    };
   },
   methods: {
-    toggleMode() {
-      this.isLoginMode = !this.isLoginMode;
-    },
-    loginUser() {
-      // Logika logowania
-    },
-    registerUser() {
-      // Logika rejestracji
+    handleUserLogin(userInfo) {
+      this.loggedInUser = userInfo;
     }
   }
 }
 </script>
+
 
 <style scoped>
   header {
@@ -99,21 +58,5 @@ export default {
   }
   .logo {
     max-height: 60px;
-  }
-  .btn{
-      background-color: var(--color-blue) ;
-      color: var(--color-light-cream) ;
-  }
-  .modal-open {
-    overflow: inherit !important;
-  }
-  .modal.fade.show{
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1050;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0,0,0,0.5);
   }
 </style>
