@@ -6,6 +6,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\RestaurantMenuController;
+use App\Http\Controllers\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,3 +36,12 @@ Route::post('/get-restaurants-by-city', [RestaurantController::class, 'getRestau
 Route::get('/get-restaurants', [RestaurantController::class, 'getRestaurants']);
 
 Route::get('/restaurant/{restaurantId}/menu', [RestaurantMenuController::class, 'getCategoriesAndMenu']);
+
+// Route dla zamówień
+Route::prefix('zamowienia')->group(function () {
+    Route::get('/', [OrderController::class, 'index']);
+    Route::post('/', [OrderController::class, 'store']);
+    Route::get('/{id}', [OrderController::class, 'show']);
+    Route::put('/{id}', [OrderController::class, 'update']);
+    Route::delete('/{id}', [OrderController::class, 'destroy']);
+});

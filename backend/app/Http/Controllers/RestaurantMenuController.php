@@ -6,32 +6,55 @@ use Illuminate\Http\Request;
 use App\Models\Restauracje;
 use App\Models\Menu;
 use App\Models\Kategorie;
+use App\Services\NameService;
 
 class RestaurantMenuController extends Controller
 {
+    protected $nameService;
+
+    public function __construct(NameService $nameService)
+    {
+        $this->nameService = $nameService;
+    }
+
     public function getCategoriesAndMenu($restaurantId)
     {
-        // Pobierz restaurację na podstawie ID
         $restaurant = Restauracje::find($restaurantId);
 
         if (!$restaurant) {
             return response()->json(['message' => 'Restauracja nie została znaleziona'], 404);
         }
 
-        // Pobierz kategorie dla danej restauracji
-        $categories = Kategorie::join('powiazania_kategorie_menu', 'kategorie.ID_Kategorii', '=', 'powiazania_kategorie_menu.ID_Kategorii')
-            ->join('menu', 'powiazania_kategorie_menu.ID_Pozycji_Menu', '=', 'menu.ID_Pozycji_Menu')
-            ->where('menu.ID_Restauracji', $restaurantId)
-            ->select('kategorie.*')
-            ->distinct()
-            ->get();
+        // Pobierz kategorie, które mają przynajmniej jedną pozycję w menu
+        $categories = Kategorie::whereHas('menu', function ($query) use ($restaurantId) {
+            $query->where('ID_Restauracji', $restaurantId);
+        })->with(['menu' => function ($query) use ($restaurantId) {
+            $query->where('ID_Restauracji', $restaurantId);
+        }])->get();
 
-        // Pobierz menu dla danej restauracji
-        $menu = Menu::where('ID_Restauracji', $restaurantId)->get();
+        // Struktura danych zgodna z Vue
+        $formattedMenu = $categories->mapWithKeys(function ($category) {
+            return [$category->Nazwa_Kategorii => $category->menu->map(function ($item) {
+
+                $imageUrl = $this->nameService->makeImgName($item->Nazwa_Pozycji);
+
+                return [
+                    'id' => $item->ID_Pozycji_Menu,
+                    'name' => $item->Nazwa_Pozycji,
+                    'price' => $item->Cena,
+                    'imageUrl' => $imageUrl
+                ];
+            })];
+        });
 
         return response()->json([
-            'categories' => $categories,
-            'menu' => $menu,
+            'restaurant' => [
+                'id' => $restaurant->ID_Restauracji,
+                'name' => $restaurant->Nazwa_Restauracji,
+                'city' => $restaurant->Miasto,
+                'menu' => $formattedMenu
+            ]
         ]);
     }
+
 }

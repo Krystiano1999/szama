@@ -10,8 +10,12 @@ class Kategorie extends Model
 {
     use HasFactory;
     protected $table = 'kategorie';
+
+    // Klucz główny tabeli
+    protected $primaryKey = 'ID_Kategorii';
+
     protected $fillable = [
-        'nazwa_kategorii',
+        'Nazwa_Kategorii',
     ];
 
     public function menu()
