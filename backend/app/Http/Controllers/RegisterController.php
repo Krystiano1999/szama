@@ -25,6 +25,7 @@ class RegisterController extends Controller
             'phone_number' => 'nullable|string',
             'address' => 'nullable|string',
             'password' => 'required|string|min:6',
+            'user_type' => 'required|integer',
         ]);
 
         if ($validator->fails()) {
@@ -48,6 +49,7 @@ class RegisterController extends Controller
             'phone_number' => $request->input('phone_number'),
             'address' => $request->input('address'),
             'password' => Hash::make($request->input('password')),
+            'user_type' => $request->input('user_type'), 
         ]);
 
         return response()->json(['message' => 'Użytkownik zarejestrowany pomyślnie']);

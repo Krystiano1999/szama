@@ -58,7 +58,8 @@ export default {
         email: '',
         phone_number:'',
         address: '',
-        password:''
+        password:'',
+        user_type: 0, //domyślnie dla usera bez uprawnien
       },
       alert: null
     };
