@@ -12,18 +12,18 @@
 </template>
  
 <script>
-export default {
-data() {
-    return {
-    searchTerm: ''
+    export default {
+        data() {
+            return {
+            searchTerm: ''
+            };
+        },
+        methods: {
+        search() {
+            this.$emit('search', this.searchTerm);
+        }
+        }
     };
-},
-methods: {
-    search() {
-    this.$emit('search', this.searchTerm);
-    }
-}
-};
 </script>
 
 <style scoped>

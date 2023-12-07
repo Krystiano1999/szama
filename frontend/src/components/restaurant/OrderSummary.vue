@@ -10,7 +10,7 @@
     <div class="total-price">
       Łączna suma: {{ formatCurrency(totalPrice) }}
     </div>
-    <button class="order-button">Zamów</button>
+    <button class="order-button" @click="placeOrder">Zamów</button>
   </div>
 </template>
 
@@ -46,6 +46,9 @@ export default {
     removeItem(itemToRemove) {
       // Metoda do usuwania elementu zamówienia, emituje zdarzenie z nazwą usuwanego elementu
       this.$emit('removeItem', itemToRemove);
+    },
+    placeOrder() {
+      this.$emit('submitOrder');
     },
   }
 };

@@ -39,10 +39,6 @@ body{
     scrollbar-color: var(--color-dark-gray) var(--color-light-cream);
 }  
 
-.container-fluid{
-    /* overflow: hidden; */
-}
-
 .text-white{
     color: var(--color-light-cream) !important;
     text-decoration: none;

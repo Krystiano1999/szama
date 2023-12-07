@@ -24,7 +24,10 @@
     },
     computed: {
       categories() {
-        return this.restaurant ? Object.keys(this.restaurant.menu) : [];
+        if (this.restaurant && this.restaurant.menu) {
+          return Object.keys(this.restaurant.menu);
+        }
+        return []; 
       }
     },
     methods: {

@@ -2,7 +2,7 @@
   <div class="col-md-2 restaurant-list px-md-0">
     <ul v-if="restaurants && restaurants.length > 0">
       <li v-for="restaurant in restaurants" :key="restaurant.id"
-          :class="{ active: restaurant.id === selectedRestaurant?.id }"
+          :class="{ active: restaurant.id === selectedRestaurantId }"
           @click="selectRestaurant(restaurant)">
         {{ restaurant.name }}
       </li>
@@ -12,15 +12,21 @@
 </template>
 
 <script>
+import { ref, computed } from 'vue';
+
 export default {
   props: {
     restaurants: Array,
     selectedRestaurant: Object
   },
-  methods: {
-    selectRestaurant(restaurant) {
-      this.$emit('restaurantSelected', restaurant);
-    }
+  setup(props, { emit }) {
+    const selectedRestaurantId = computed(() => props.selectedRestaurant?.id);
+
+    const selectRestaurant = (restaurant) => {
+      emit('restaurantSelected', restaurant);
+    };
+
+    return { selectedRestaurantId, selectRestaurant };
   }
 };
 </script>

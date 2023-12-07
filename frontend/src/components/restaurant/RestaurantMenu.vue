@@ -2,7 +2,6 @@
   <div class="col-md-7 restaurant-menu">
     <div v-if="restaurant">
       <div v-for="(dishes, category) in filteredMenu" :key="category">
-        <!-- <h4 class="mt-2">{{ category }}</h4> -->
         <div class="menu-items menu-grid mt-3">
           <div class="menu-item position-relative" v-for="dish in dishes" :key="dish.id" @mouseenter="hovering = dish.id" @mouseleave="hovering = null">
             <img :src="getImageUrl(restaurant.name, dish.imageUrl)" :alt="dish.name">
@@ -24,7 +23,6 @@
   </div>
 </template>
 
-
 <script>
 export default {
   props: {
@@ -39,16 +37,18 @@ export default {
   },
   computed: {
     filteredMenu() {
-    if (!this.activeCategory) {
-      // Złącz wszystkie dania w jedną listę, jeśli nie ma aktywnej kategorii
-      let allDishes = [];
-      for (let category in this.restaurant.menu) {
-        allDishes = allDishes.concat(this.restaurant.menu[category]);
+      if (!this.restaurant || !this.restaurant.menu) {
+        return {};
       }
-      return { 'Wszystkie': allDishes };
+      if (!this.activeCategory) {
+        let allDishes = [];
+        for (let category in this.restaurant.menu) {
+          allDishes = allDishes.concat(this.restaurant.menu[category]);
+        }
+        return { 'Wszystkie': allDishes };
+      }
+      return { [this.activeCategory]: this.restaurant.menu[this.activeCategory] };
     }
-    return { [this.activeCategory]: this.restaurant.menu[this.activeCategory] };
-  }
   },
   methods: {
     addItem(dish) {
@@ -56,29 +56,18 @@ export default {
       this.$emit('addItem', { ...dish, quantity: quantityToAdd });
       this.localQuantities[dish.id] = 1;
     },
-    mounted() {
-      if (this.restaurant && this.restaurant.menu) {
-        Object.keys(this.restaurant.menu).forEach(category => {
-          this.restaurant.menu[category].forEach(dish => {
-            this.$set(this.localQuantities, dish.id, 1);
-          });
-        });
-      }
-    },
     formatCurrency(value) {
-      // formatowanie ceny jako waluty 
-      const numberFormat = new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' });
-      return numberFormat.format(value);
+      return new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' }).format(value);
     },
     getImageUrl(restaurantName, imageUrl) {
-      const restaurantSlug = restaurantName
-        .toLowerCase()
-        .replace(/\s+/g, '') 
-        .replace(/[^a-z0-9-]/g, ''); 
-      
-      
-      return require(`@/assets/images/${restaurantSlug}/${imageUrl}`);
-    },
+      const restaurantSlug = restaurantName.toLowerCase().replace(/\s+/g, '-');
+      try {
+        return require(`@/assets/images/${restaurantSlug}/${imageUrl}`);
+      } catch (e) {
+        console.error(e);
+        return '/default-image.png'; // ścieżka do obrazu domyślnego, gdy obraz nie zostanie znaleziony
+      }
+    }
   }
 };
 </script>
