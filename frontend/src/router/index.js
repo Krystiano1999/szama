@@ -7,6 +7,7 @@ import DashboardComponent from '@/components/admin/DashboardAdmin.vue'
 import CategoryManagement from '@/components/admin/CategoryManagement.vue'
 import MenuManagement from '@/components/admin/MenuManagement.vue'
 import OrdersManagement from '@/components/admin/OrdersManagement.vue'
+import RegisterRestaurant from '@/components/registration/RegisterRestaurant.vue'
 
 const routes = [
   {
@@ -18,6 +19,11 @@ const routes = [
     path: '/restaurants',
     name: 'Restaurants',
     component: RestaurantsPage
+  },
+  {
+    path: '/register-restaurant',
+    name: 'RegisterRestaurant',
+    component: RegisterRestaurant
   },
   {
     path: '/admin/login',

@@ -44,3 +44,7 @@ export const updateOrder = (orderId, orderData) => {
 export const deleteOrder = (orderId) => {
   return apiClient.delete(`/zamowienia/${orderId}`);
 };
+
+export const registerRestaurant = (restaurantData) => {
+  return apiClient.post('/register-restaurant', restaurantData);
+};

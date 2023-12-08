@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\RestaurantMenuController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\RestaurantRegistrationController ;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,3 +46,5 @@ Route::prefix('zamowienia')->group(function () {
     Route::put('/{id}', [OrderController::class, 'update']);
     Route::delete('/{id}', [OrderController::class, 'destroy']);
 });
+
+Route::post('/register-restaurant', [RestaurantRegistrationController::class, 'store']);
