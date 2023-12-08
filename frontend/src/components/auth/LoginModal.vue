@@ -72,7 +72,9 @@ export default {
       loginUser(this.formData)
         .then(response => {
           console.log(response.data);
-          this.$emit('user-logged-in', { username: response.data.username });
+          localStorage.setItem('token', response.data.token);
+          localStorage.setItem('id', response.data.user_id);
+          localStorage.setItem('username', response.data.username);
           showSuccessMessage("Zalogowano");
           this.closeModalDirectly();
         })

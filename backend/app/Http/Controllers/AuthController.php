@@ -15,16 +15,21 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $user = Auth::user(); // Pobierz zalogowanego użytkownika
 
-            // Zwróć id i username użytkownika
+            // Tworzenie tokena Sanctum dla zalogowanego użytkownika
+            $token = $user->createToken('API Token')->plainTextToken;
+
+            // Zwróć id i username użytkownika wraz z tokenem
             return response()->json([
                 'message' => 'Użytkownik zalogowany',
                 'user_id' => $user->id,
                 'username' => $user->username,
+                'token' => $token, 
             ]);
         } else {
             return response()->json(['error' => 'Nieprawidłowe dane logowania'], 401);
         }
     }
+
 
     public function logout()
     {

@@ -54,16 +54,29 @@ export default {
       messageType: '',
     };
   },
+  created() {
+    this.checkLoginStatus();
+  },
   methods: {
     handleUserLogin(userInfo) {
       this.loggedInUser = userInfo;
     },
+    checkLoginStatus() {
+      const token = localStorage.getItem('token');
+      const username = localStorage.getItem('username'); 
+      if (token && username) {
+        this.loggedInUser = { username };
+      }
+    },
     async logout() {
       try {
         const response = await logoutUser();
-        // Tu możesz obsłużyć odpowiedź z serwera, np. usunąć token z pamięci, przekierować itd.
-        console.log(response.data.message); // Wyświetli wiadomość "Użytkownik wylogowany"
+        console.log(response.data.message); 
         showSuccessMessage("Pomyślnie wylogowano");
+        localStorage.removeItem('token');
+        localStorage.removeItem('id');
+        localStorage.removeItem('username'); 
+        this.loggedInUser = null;
         // Przekierowanie do strony głównej, ekranu logowania itp.
         this.$router.push('/');
       } catch (error) {

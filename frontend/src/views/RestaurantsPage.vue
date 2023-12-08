@@ -130,8 +130,13 @@ export default {
       this.activeCategory = category;
     },
     submitOrder() {
+      const userId = localStorage.getItem('id'); // Pobranie ID użytkownika
+      if (!userId) {
+        showErrorMessage("Proszę się zalogować przed złożeniem zamówienia");
+        return;
+      }
       const orderData = {
-        id_uzytkownika: 1, 
+        id_uzytkownika: userId, 
         cena: this.totalPrice,
         items: this.orderItems.map(item => ({
           id_pozycji_menu: item.id,
