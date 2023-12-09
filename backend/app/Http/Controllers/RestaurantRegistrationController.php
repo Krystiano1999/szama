@@ -80,6 +80,7 @@ class RestaurantRegistrationController extends Controller
             'Miasto' => $registration->city,
             'Adres' => $registration->address,
             'Opis' => $registration->description,
+            'user_id' => $user->id,
         ]);
 
         // Wysyłanie e-maila z danymi logowania

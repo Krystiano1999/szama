@@ -27,13 +27,17 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::post('/register', [RegisterController::class, 'register']);
+
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout']);
-
+Route::post('/admin/login', [AuthController::class, 'loginAdmin']);
+Route::post('/superadmin/login', [AuthController::class, 'loginSuperAdmin']);
 
 
 Route::post('/get-restaurants-by-city', [RestaurantController::class, 'getRestaurantsByCity']);
 Route::get('/get-restaurants', [RestaurantController::class, 'getRestaurants']);
+Route::get('/get-all-restaurants', [RestaurantController::class, 'getAllRestaurants']);
+Route::delete('/restaurant/{restaurantId}/delete', [RestaurantController::class, 'deleteRestaurant']);
 
 Route::get('/restaurant/{restaurantId}/menu', [RestaurantMenuController::class, 'getCategoriesAndMenu']);
 

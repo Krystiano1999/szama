@@ -21,6 +21,12 @@
   </script>
   
   <style>
-
+    .admin-page .row{
+        overflow:hidden;
+    }
+    .admin-content{
+        max-height:100vh;
+        overflow-y:scroll;
+    }
   </style>
   

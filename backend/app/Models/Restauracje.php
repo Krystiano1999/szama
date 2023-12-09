@@ -15,7 +15,13 @@ class Restauracje extends Model
         'Miasto',
         'Adres',
         'Opis',
+        'user_id',
     ];
 
     protected $table = 'restauracje';
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

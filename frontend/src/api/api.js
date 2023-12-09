@@ -60,3 +60,15 @@ export const rejectRestaurantRegistration = (id) => {
 export const acceptRestaurantRegistration = (id) => {
   return apiClient.post(`/restaurant-registrations/accept/${id}`);
 };
+
+export const getAllRestaurants = () => {
+  return apiClient.get('/get-all-restaurants');
+};
+
+export const deleteRestaurant = (restaurantId) => {
+  return apiClient.delete(`/restaurant/${restaurantId}/delete`);
+};
+
+export const loginSuperAdmin = (credentials) => {
+  return apiClient.post('/superadmin/login', credentials);
+};

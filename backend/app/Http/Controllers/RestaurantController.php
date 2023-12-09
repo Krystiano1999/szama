@@ -22,4 +22,35 @@ class RestaurantController extends Controller
 
         return response()->json(['restaurants' => $restaurants]);
     }
+
+    public function getAllRestaurants()
+    {
+        $restaurants = Restauracje::with('user') // Załaduj powiązane dane użytkownika
+                        ->get()
+                        ->sortBy('Miasto')
+                        ->map(function ($restaurant) {
+                            return [
+                                'id' => $restaurant->ID_Restauracji,
+                                'name' => $restaurant->Nazwa_Restauracji,
+                                'owner' => $restaurant->user->username,
+                                'city' => $restaurant->Miasto,
+                                'address' => $restaurant->Adres,
+                                'description' => $restaurant->Opis
+                            ];
+                        });
+
+        return response()->json(['restaurants' => $restaurants]);
+    }
+
+    public function deleteRestaurant($id)
+    {
+        $restaurant = Restauracje::find($id);
+        if ($restaurant) {
+            $restaurant->delete();
+            return response()->json(['message' => 'Restauracja została usunięta.']);
+        } else {
+            return response()->json(['message' => 'Nie znaleziono restauracji.'], 404);
+        }
+    }
+
 }
