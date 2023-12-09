@@ -77,6 +77,7 @@ export default {
           localStorage.setItem('username', response.data.username);
           showSuccessMessage("Zalogowano");
           this.closeModalDirectly();
+          this.$emit('user-logged-in', { username: response.data.username });
         })
         .catch(error => {
           console.error(error.response.data);

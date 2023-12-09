@@ -17,16 +17,20 @@ class AuthController extends Controller
         return $this->login($request, 2); // 2 to typ użytkownika dla superadmina
     }
 
-    private function login(Request $request, $userType)
+    public function login(Request $request, $userType = null)
     {
         $credentials = $request->only('username', 'password');
-        $credentials['user_type'] = $userType;
+
+        if ($userType !== null) {
+            // Dodajemy warunek user_type tylko jeśli jest podany
+            $credentials['user_type'] = $userType;
+        }
 
         if (Auth::attempt($credentials)) {
             $user = Auth::user(); // Pobierz zalogowanego użytkownika
 
-            // Sprawdź, czy typ użytkownika zgadza się z oczekiwanym
-            if ($user->user_type != $userType) {
+            // Sprawdź, czy typ użytkownika zgadza się z oczekiwanym, jeśli podano $userType
+            if ($userType !== null && $user->user_type != $userType) {
                 return response()->json(['error' => 'Nieprawidłowy typ użytkownika'], 401);
             }
 
