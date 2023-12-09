@@ -8,6 +8,9 @@ import CategoryManagement from '@/components/admin/CategoryManagement.vue'
 import MenuManagement from '@/components/admin/MenuManagement.vue'
 import OrdersManagement from '@/components/admin/OrdersManagement.vue'
 import RegisterRestaurant from '@/components/registration/RegisterRestaurant.vue'
+import NewRestaurantManagement from '@/components/superadmin/NewRestaurantManagement.vue'
+import RestaurantManagement from '@/components/superadmin/RestaurantManagement.vue'
+import SuperAdminPage from '@/views/SuperAdminPage.vue'
 
 const routes = [
   {
@@ -42,10 +45,19 @@ const routes = [
       { path: 'category-management', name: 'CategoryManagement', component: CategoryManagement },
       { path: 'menu-management', name: 'MenuManagement', component: MenuManagement },
       { path: 'orders-management', name: 'OrdersManagement', component: OrdersManagement },
-      // ... inne trasy podrzędne
     ]
   },
-  // Dodaj kolejne trasy w miarę potrzeb
+  {
+    path: '/superadmin',
+    name: 'SuperAdmin',
+    redirect: '/superadmin/new-restaurant-management',
+    component: SuperAdminPage,
+    meta: { requiresAuth: true },
+    children: [
+      { path: 'new-restaurant-management',name: 'NewRestaurantManagement',component: NewRestaurantManagement},
+      {path: 'restaurant-management',name: 'RestaurantManagement',component: RestaurantManagement},
+    ]
+  },
 ]
 
 const router = createRouter({

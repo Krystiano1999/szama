@@ -48,3 +48,15 @@ export const deleteOrder = (orderId) => {
 export const registerRestaurant = (restaurantData) => {
   return apiClient.post('/register-restaurant', restaurantData);
 };
+
+export const getRestaurantRegistrations = () => {
+  return apiClient.get('/restaurant-registrations');
+};
+
+export const rejectRestaurantRegistration = (id) => {
+  return apiClient.delete(`/restaurant-registrations/${id}`);
+};
+
+export const acceptRestaurantRegistration = (id) => {
+  return apiClient.post(`/restaurant-registrations/accept/${id}`);
+};

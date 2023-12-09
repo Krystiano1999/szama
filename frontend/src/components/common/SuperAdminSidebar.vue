@@ -1,23 +1,16 @@
 <template>
     <div class="admin-sidebar text-start col-md-2">
       <ul class="sidebar-list">
-        <li class="sidebar-item"><router-link to="/admin/dashboard" class="sidebar-link">Zarządzanie restauracją</router-link></li>
+        <li class="sidebar-item"><router-link to="/admin/new-restaurant-management" class="sidebar-link">Zarządzanie rejestracjami restauracji</router-link></li>
   
-        <li class="sidebar-item"><router-link to="/admin/category-management" class="sidebar-link">Zarządzanie kategoriami</router-link></li>
-  
-        <li class="sidebar-item"><router-link to="/admin/menu-management" class="sidebar-link">Zarządzanie menu</router-link></li>
-  
-        <li class="sidebar-item"><router-link to="/admin/orders-management" class="sidebar-link">Zarządzanie zamówieniami</router-link></li>
-  
-        <li class="sidebar-item"><router-link to="/admin/orders-management" class="sidebar-link">Wyloguj</router-link></li>
-
+        <li class="sidebar-item"><router-link to="/admin/restaurant-management" class="sidebar-link">Zarządzanie kategoriami</router-link></li>
       </ul>
     </div>
   </template>
   
   <script>
   export default {
-    name: "AdminSidebar"
+    name: "SuperAdminSidebar"
   };
   </script>
   

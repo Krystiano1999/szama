@@ -33,7 +33,6 @@ Route::post('/logout', [AuthController::class, 'logout']);
 
 
 Route::post('/get-restaurants-by-city', [RestaurantController::class, 'getRestaurantsByCity']);
-
 Route::get('/get-restaurants', [RestaurantController::class, 'getRestaurants']);
 
 Route::get('/restaurant/{restaurantId}/menu', [RestaurantMenuController::class, 'getCategoriesAndMenu']);
@@ -48,3 +47,6 @@ Route::prefix('zamowienia')->group(function () {
 });
 
 Route::post('/register-restaurant', [RestaurantRegistrationController::class, 'store']);
+Route::get('/restaurant-registrations', [RestaurantRegistrationController::class, 'index']);
+Route::delete('/restaurant-registrations/{id}', [RestaurantRegistrationController::class, 'destroy']);
+Route::post('/restaurant-registrations/accept/{id}', [RestaurantRegistrationController::class, 'acceptRegistration']);
