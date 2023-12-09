@@ -72,3 +72,7 @@ export const deleteRestaurant = (restaurantId) => {
 export const loginSuperAdmin = (credentials) => {
   return apiClient.post('/superadmin/login', credentials);
 };
+
+export const loginAdmin = (credentials) => {
+  return apiClient.post('/admin/login', credentials);
+};

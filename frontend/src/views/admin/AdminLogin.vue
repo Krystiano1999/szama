@@ -10,24 +10,39 @@
   </template>
   
   <script>
-  export default {
+  import { loginAdmin } from '@/api/api';
+    import { showErrorMessage } from '@/components/notification/NotificationHelper';
+
+    export default {
     data() {
-      return {
-        credentials: {
-          username: '',
-          password: ''
-        }
-      };
+        return {
+            credentials: {
+                username: '',
+                password: ''
+            }
+        };
     },
     methods: {
-      login() {
-        // Implementacja logowania (np. wywołanie API)
-        console.log("Logowanie z danymi:", this.credentials);
-        // Redirect po udanym logowaniu
-        // this.$router.push('/admin/dashboard');
-      }
+        login() {
+        loginAdmin(this.credentials)
+            .then(response => {
+            // Sprawdź, czy odpowiedź zawiera token
+            if (response.data.token) {
+                console.log("Logowanie udane:", response);
+                // Zapisz token w localStorage
+                localStorage.setItem('token', response.data.token);
+                localStorage.setItem('userType', 'admin'); // Zapisz typ użytkownika
+                // Przekieruj do panelu superadmina
+                this.$router.push('/admin/dashboard');
+            }
+            })
+            .catch(error => {
+                console.error("Błąd logowania:", error);
+                showErrorMessage("Nieprawidłowe dane logowania");
+            });
+        }
     }
-  };
+    };
   </script>
   
   <style>
