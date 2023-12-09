@@ -1,23 +1,35 @@
 <template>
-    <div class="admin-sidebar text-start col-md-2">
+    <div class="admin-sidebar text-start col-md-2 position-relative">
       <ul class="sidebar-list">
         <li class="sidebar-item"><router-link to="/admin/dashboard" class="sidebar-link">Zarządzanie restauracją</router-link></li>
-  
-        <li class="sidebar-item"><router-link to="/admin/category-management" class="sidebar-link">Zarządzanie kategoriami</router-link></li>
   
         <li class="sidebar-item"><router-link to="/admin/menu-management" class="sidebar-link">Zarządzanie menu</router-link></li>
   
         <li class="sidebar-item"><router-link to="/admin/orders-management" class="sidebar-link">Zarządzanie zamówieniami</router-link></li>
   
-        <li class="sidebar-item"><router-link to="/admin/orders-management" class="sidebar-link">Wyloguj</router-link></li>
-
       </ul>
+      <div class="fixed-bottom position-absolute d-flex justify-content-center align-items-center py-3">
+        <a role="button" class="btn btn-light" @click="logout">Wyloguj</a>
+      </div>
     </div>
   </template>
   
   <script>
+  import { logoutUser } from '@/api/api';
   export default {
-    name: "AdminSidebar"
+    name: "AdminSidebar",
+    methods: {
+      logout() {
+        logoutUser()
+          .then(() => {
+            localStorage.removeItem('token');
+            this.$router.push('/admin/login');
+          })
+          .catch(error => {
+            console.error("Błąd wylogowania:", error);
+          });
+      }
+    }
   };
   </script>
   
