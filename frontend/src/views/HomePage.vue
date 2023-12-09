@@ -1,4 +1,5 @@
 <template>
+  <SnowFlakes />
   <HeaderComponent />
   <div>
     <MainSlider/>
@@ -12,6 +13,7 @@ import HeaderComponent from '@/components/common/Header.vue';
 import FooterComponent from '@/components/common/Footer.vue';
 import MainSlider from '@/components/home/MainSlider.vue'
 import HowToOrder from '@/components/home/HowToOrder.vue'
+import SnowFlakes from '@/components/snow/SnowFlakes.vue';
 
 export default {
   name:'HomePage',
@@ -19,7 +21,8 @@ export default {
     HeaderComponent,
     FooterComponent,
     MainSlider,
-    HowToOrder
+    HowToOrder,
+    SnowFlakes 
   }
 }
 </script>

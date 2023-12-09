@@ -1,4 +1,5 @@
 <template>
+  <SnowFlakes />
   <HeaderComponent />
   <div class="container-fluid position-relative mt-70 mh100-70">
     <div class="row">
@@ -39,6 +40,8 @@ import OrderSummary from '@/components/restaurant/OrderSummary.vue';
 import RestaurantCategory from '@/components/restaurant/RestaurantCategory.vue';
 import { getRestaurantsByCity, getRestaurantMenu, createOrder } from "@/api/api.js";
 import { showSuccessMessage, showErrorMessage } from '@/components/notification/NotificationHelper';
+import SnowFlakes from '@/components/snow/SnowFlakes.vue';
+
 
 export default {
   components: {
@@ -48,7 +51,8 @@ export default {
     RestaurantList,
     RestaurantMenu,
     OrderSummary,
-    RestaurantCategory
+    RestaurantCategory,
+    SnowFlakes 
   },
   data() {
     return {
