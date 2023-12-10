@@ -59,14 +59,16 @@ export default {
     formatCurrency(value) {
       return new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' }).format(value);
     },
-    getImageUrl(restaurantName, imageUrl) {
-      const restaurantSlug = restaurantName.toLowerCase().replace(/\s+/g, '-');
-      try {
-        return require(`@/assets/images/${restaurantSlug}/${imageUrl}`);
-      } catch (e) {
-        console.error(e);
-        return '/default-image.png'; // ścieżka do obrazu domyślnego, gdy obraz nie zostanie znaleziony
-      }
+    getImageUrl(restaurantName, imageName) {
+      const normalizedRestaurantName = this.normalizeString(restaurantName);
+      const normalizedImageName = this.normalizeString(imageName);
+      return `/images/${normalizedRestaurantName}/${normalizedImageName}`;
+    },
+
+    normalizeString(str) {
+      return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase()
+            .replace(/\s+/g, '-');
     }
   }
 };

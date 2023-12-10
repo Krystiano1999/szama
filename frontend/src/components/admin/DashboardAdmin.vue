@@ -1,61 +1,27 @@
 <template>
   <div class="dashboard">
-    <h1>Overview</h1>
-    <div class="dashboard-cards">
-      <div class="card">
-        <div class="card-icon">
-          <img src="path-to-your-account-icon" alt="Account Balance">
-        </div>
-        <div class="card-content">
-          <p>Account Balance</p>
-          <h2>$30,659.45</h2>
-          <button>View all</button>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-icon">
-          <img src="path-to-your-pending-icon" alt="Pending">
-        </div>
-        <div class="card-content">
-          <p>Pending</p>
-          <h2>$19,500.45</h2>
-          <button>View all</button>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-icon">
-          <img src="path-to-your-processed-icon" alt="Processed">
-        </div>
-        <div class="card-content">
-          <p>Processed</p>
-          <h2>$20,659</h2>
-          <button>View all</button>
-        </div>
-      </div>
-    </div>
-
     <h2 class="mt-5">Zarządzanie Restauracją</h2>
     <div class="restaurant-management">
       <form class="row" @submit.prevent="saveRestaurant">
         <div class="form-group col-md-6">
           <label for="restaurant-name">Nazwa Restauracji</label>
-          <input type="text" id="restaurant-name" v-model="restaurant.name" placeholder="Wpisz nazwę restauracji">
+          <input type="text" id="restaurant-name" v-model="restaurant.Nazwa_Restauracji" placeholder="Wpisz nazwę restauracji">
         </div>
         <div class="form-group col-md-6">
           <label for="restaurant-region">Województwo</label>
-          <input type="text" id="restaurant-region" v-model="restaurant.region" placeholder="Wpisz województwo">
+          <input type="text" id="restaurant-region" v-model="restaurant.Wojewodztwo" placeholder="Wpisz województwo">
         </div>
         <div class="form-group col-md-6">
           <label for="restaurant-city">Miasto</label>
-          <input type="text" id="restaurant-city" v-model="restaurant.city" placeholder="Wpisz miasto">
+          <input type="text" id="restaurant-city" v-model="restaurant.Miasto" placeholder="Wpisz miasto">
         </div>
         <div class="form-group col-md-6">
           <label for="restaurant-address">Adres</label>
-          <input type="text" id="restaurant-address" v-model="restaurant.address" placeholder="Wpisz adres">
+          <input type="text" id="restaurant-address" v-model="restaurant.Adres" placeholder="Wpisz adres">
         </div>
         <div class="form-group">
           <label for="restaurant-description">Opis</label>
-          <textarea id="restaurant-description" v-model="restaurant.description" placeholder="Wpisz opis restauracji"></textarea>
+          <textarea id="restaurant-description" v-model="restaurant.Opis" placeholder="Wpisz opis restauracji"></textarea>
         </div>
         <button type="submit" class="save-button">Zapisz</button>
       </form>
@@ -64,6 +30,9 @@
 </template>
 
 <script>
+import { getRestaurantData, updateRestaurantData } from '@/api/api';
+import { showSuccessMessage } from '@/components/notification/NotificationHelper';
+
 export default {
   name: "DashboardAdmin",
   data() {
@@ -77,15 +46,43 @@ export default {
       }
     };
   },
+  mounted() {
+    this.fetchRestaurantData();
+  },
   methods: {
+    fetchRestaurantData() {
+      const userId = localStorage.getItem('id');
+      getRestaurantData(userId).then(response => {
+        this.restaurant = response.data.restaurant;
+        localStorage.setItem('restaurant_id', this.restaurant.ID_Restauracji);
+        localStorage.setItem('restaurant_name', this.restaurant.Nazwa_Restauracji);
+        //console.log(this.restaurant);
+        //console.log(localStorage);
+      }).catch(error => {
+        console.error("Błąd podczas ładowania danych restauracji:", error);
+      });
+    },
     saveRestaurant() {
-      // Logika zapisywania restauracji
-      console.log(this.restaurant);
-      // Możesz wysłać te dane do serwera za pomocą np. axios
+      const restaurantData = {
+        name: this.restaurant.Nazwa_Restauracji,
+        region: this.restaurant.Wojewodztwo,
+        city: this.restaurant.Miasto,
+        address: this.restaurant.Adres,
+        description: this.restaurant.Opis,
+        id: this.restaurant.ID_Restauracji
+      };
+
+      updateRestaurantData(restaurantData).then(() => {
+        showSuccessMessage("Dane restauracji zostały zaktualizowane");
+        // Można dodać powiadomienie o sukcesie
+      }).catch(error => {
+        console.error("Błąd podczas aktualizacji danych restauracji:", error);
+      });
     }
   }
 };
 </script>
+
 
 <style>
 .dashboard {

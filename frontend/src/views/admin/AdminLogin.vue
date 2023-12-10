@@ -10,7 +10,7 @@
   </template>
   
   <script>
-  import { loginAdmin } from '@/api/api';
+    import { loginAdmin } from '@/api/api';
     import { showErrorMessage } from '@/components/notification/NotificationHelper';
 
     export default {
@@ -26,13 +26,13 @@
         login() {
         loginAdmin(this.credentials)
             .then(response => {
-            // Sprawdź, czy odpowiedź zawiera token
             if (response.data.token) {
                 console.log("Logowanie udane:", response);
-                // Zapisz token w localStorage
+                
                 localStorage.setItem('token', response.data.token);
-                localStorage.setItem('userType', 'admin'); // Zapisz typ użytkownika
-                // Przekieruj do panelu superadmina
+                localStorage.setItem('id', response.data.user_id);
+                localStorage.setItem('userType', 'admin'); 
+              
                 this.$router.push('/admin/dashboard');
             }
             })

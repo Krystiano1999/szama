@@ -57,4 +57,55 @@ class RestaurantMenuController extends Controller
         ]);
     }
 
+    public function addMenuItem(Request $request)
+    {
+        $data = $request->validate([
+            'Nazwa_Pozycji' => 'required|max:255',
+            'Cena' => 'required|numeric',
+            'kategoria_id' => 'required|exists:kategorie,ID_Kategorii',
+            'ID_Restauracji' => 'required|exists:restauracje,ID_Restauracji',
+        ]);
+    
+        // Pobierz nazwę kategorii
+        $categoryName = Kategorie::where('ID_Kategorii', $data['kategoria_id'])->first()->Nazwa_Kategorii;
+    
+        // Utwórz opis pozycji
+        $opisPozycji = $categoryName . ' ' . $data['Nazwa_Pozycji'];
+    
+        // Dodaj opis do danych
+        $data['Opis_Pozycji'] = $opisPozycji;
+    
+        $menuItem = Menu::create($data);
+
+        if ($request->hasFile('image')) {
+            $filename = $this->saveImage($request->file('image'), $data['Nazwa_Pozycji']);
+            $menuItem->update(['imageUrl' => $filename]);
+        }
+
+        return response()->json(['message' => 'Pozycja menu została dodana', 'menuItem' => $menuItem]);
+    }
+
+    protected function saveImage($image, $itemName)
+    {
+        $normalizedName = $this->nameService->makeImgName($itemName);
+        $filename = $normalizedName . '.' . $image->getClientOriginalExtension();
+        $path = public_path('images/' . $normalizedName);
+        $image->move($path, $filename);
+        return '/images/' . $normalizedName . '/' . $filename;
+    }
+
+    public function deleteMenuItem($itemId)
+    {
+        $menuItem = Menu::where('ID_Pozycji_Menu', $itemId)->first();
+
+        if (!$menuItem) {
+            return response()->json(['message' => 'Pozycja menu nie została znaleziona'], 404);
+        }
+    
+        $menuItem->delete();
+    
+        return response()->json(['message' => 'Pozycja menu została usunięta']);
+    }
+
+    
 }

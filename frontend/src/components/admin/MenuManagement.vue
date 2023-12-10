@@ -1,58 +1,123 @@
 <template>
-    <div class="menu-management">
-      <h1>Menu</h1>
-      <button class="add-menu-item-btn">+ Add menu item</button>
-      <h2>Added menu item</h2>
-      <table class="menu-table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Image</th>
-            <th>Name</th>
-            <th>Category</th>
-            <th>Price</th>
-            <th>Available?</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="item in menuItems" :key="item.id">
-            <td>{{ item.id }}</td>
-            <td><img :src="item.image" alt="Menu item" class="menu-item-image"/></td>
-            <td>{{ item.name }}</td>
-            <td>{{ item.category }}</td>
-            <td>{{ item.price.toFixed(2) }}</td>
-            <td>
-              <span class="availability" :class="{ available: item.available }">
-                {{ item.available ? 'Available' : 'Unavailable' }}
-              </span>
-            </td>
-            <td>
-              <button class="edit-btn">✏️</button>
-              <button class="delete-btn">🗑️</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </template>
-  
-  <script>
-  export default {
-    name: 'MenuManagement',
-    data() {
-      return {
-        // Przykładowe dane, należy je pobrać z API lub stanu aplikacji
-        menuItems: [
-          // Tutaj będą dane z API
-        ]
-      };
+  <div class="menu-management">
+    <h1>Menu</h1>
+    <button class="add-menu-item-btn" @click="openAddModal">+ Add menu item</button>
+    <h2>Added menu items</h2>
+    <table class="menu-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Image</th>
+          <th>Name</th>
+          <th>Category</th>
+          <th>Price</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="item in menuItems" :key="item.id">
+          <td>{{ item.id }}</td>
+          <td><img :src="getImageUrl(item.name)" alt="Menu item" class="menu-item-image"/></td>
+          <td>{{ item.name }}</td>
+          <td>{{ item.category }}</td>
+          <td>{{ item.price ? parseFloat(item.price).toFixed(2) : '0.00' }}</td>
+          <td>
+            <button class="delete-btn" @click="deleteItem(item.id)">🗑️</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Modale -->
+    <AddMenuItemModal
+      v-if="isAddModalVisible"
+      :categories="categories"
+      :isVisible="isAddModalVisible"
+      @add-item="addItem"
+      @close-modal="closeAddModal"
+    />
+  </div>
+</template>
+
+<script>
+import { getRestaurantMenu, deleteMenuItem, addMenuItem } from '@/api/api';
+import AddMenuItemModal from '@/components/modal/AddMenuItemModal.vue';
+
+export default {
+  name: 'MenuManagement',
+  components: {
+    AddMenuItemModal
+  },
+  data() {
+    return {
+      menuItems: [],
+      categories: [], 
+      restaurantId: localStorage.getItem('restaurant_id'),
+      restaurantName: localStorage.getItem('restaurant_name'),
+      selectedItem: null,
+      isEditModalVisible: false,
+      isAddModalVisible: false
+    };
+  },
+  mounted() {
+    this.fetchMenuItems();
+  },
+  methods: {
+    fetchMenuItems() {
+      getRestaurantMenu(this.restaurantId).then(response => {
+        const categories = response.data.restaurant.menu;
+        this.menuItems = Object.values(categories).flat().map(item => ({
+          ...item,
+          category: Object.keys(categories).find(key => categories[key].includes(item)),
+        }));
+        // Pobierz kategorie
+        this.categories = Object.keys(categories).map(key => ({ id: key, name: key }));
+      }).catch(error => {
+        console.error("Błąd podczas ładowania menu:", error);
+      });
     },
-    methods: {
-      // Metody do zarządzania elementami menu, np. dodawanie, edycja, usuwanie
-    }
-  };
-  </script>
+    getImageUrl(name) {
+      const normalizedName = this.normalizeString(name);
+      const normalizedRestaurantName = this.normalizeString(this.restaurantName);
+      return `/images/${normalizedRestaurantName}/${normalizedName}.png`;
+    },
+    normalizeString(str) {
+      return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase()
+            .replace(/\s+/g, '-');
+    },
+    deleteItem(itemId) {
+      if (confirm('Czy na pewno chcesz usunąć tę pozycję menu?')) {
+        deleteMenuItem(itemId).then(() => {
+          this.menuItems = this.menuItems.filter(item => item.id !== itemId);
+          alert('Pozycja menu została usunięta');
+        }).catch(error => {
+          console.error("Błąd podczas usuwania pozycji menu:", error);
+        });
+      }
+    },
+    addItem(item) {
+      addMenuItem({ ...item, ID_Restauracji: this.restaurantId }).then(() => {
+        this.closeAddModal();
+        this.fetchMenuItems(); // Odśwież listę elementów menu
+      }).catch(error => {
+        console.error("Błąd podczas dodawania pozycji menu:", error);
+      });
+    },
+    // Nowa metoda do znalezienia ID kategorii
+    findCategoryId(categoryName) {
+      const category = this.categories.find(c => c.name === categoryName);
+      return category ? category.id : null;
+    },
+    openAddModal() {
+      this.isAddModalVisible = true;
+    },
+    closeAddModal() {
+      this.isAddModalVisible = false;
+    },
+  }
+};
+</script>
   
   <style scoped>
   .menu-management {
@@ -60,7 +125,7 @@
   }
   
   .add-menu-item-btn {
-    background-color: #4CAF50; /* Zielony */
+    background-color: #4CAF50;
     color: white;
     padding: 10px 20px;
     margin: 15px 0;
@@ -95,11 +160,6 @@
   }
   
   .available {
-    background-color: #4CAF50; /* Zielony */
+    background-color: #4CAF50; 
   }
-  
-  
-  
-  /* Dalsze style... */
   </style>
-  

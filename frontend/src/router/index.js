@@ -4,7 +4,6 @@ import RestaurantsPage from '@/views/RestaurantsPage.vue';
 import AdminLogin from '@/views/admin/AdminLogin.vue';
 import AdminPage from '@/views/AdminPage.vue';
 import DashboardComponent from '@/components/admin/DashboardAdmin.vue';
-import CategoryManagement from '@/components/admin/CategoryManagement.vue';
 import MenuManagement from '@/components/admin/MenuManagement.vue';
 import OrdersManagement from '@/components/admin/OrdersManagement.vue';
 import RegisterRestaurant from '@/components/registration/RegisterRestaurant.vue';
@@ -49,7 +48,6 @@ const routes = [
     meta: { requiresAuth: true, userType: 'admin' },
     children: [
       { path: 'dashboard', name: 'Dashboard', component: DashboardComponent },
-      { path: 'category-management', name: 'CategoryManagement', component: CategoryManagement },
       { path: 'menu-management', name: 'MenuManagement', component: MenuManagement },
       { path: 'orders-management', name: 'OrdersManagement', component: OrdersManagement },
     ]

@@ -8,6 +8,7 @@ use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\RestaurantMenuController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\RestaurantRegistrationController ;
+use App\Http\Controllers\CategoryController ;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,8 +39,13 @@ Route::post('/get-restaurants-by-city', [RestaurantController::class, 'getRestau
 Route::get('/get-restaurants', [RestaurantController::class, 'getRestaurants']);
 Route::get('/get-all-restaurants', [RestaurantController::class, 'getAllRestaurants']);
 Route::delete('/restaurant/{restaurantId}/delete', [RestaurantController::class, 'deleteRestaurant']);
+Route::get('/restaurant-data/{userId}', [RestaurantController::class, 'getRestaurantData']);
+Route::put('/update-restaurant-data', [RestaurantController::class, 'updateRestaurantData']);
 
 Route::get('/restaurant/{restaurantId}/menu', [RestaurantMenuController::class, 'getCategoriesAndMenu']);
+Route::delete('/menu-item/{itemId}', [RestaurantMenuController::class, 'deleteMenuItem']);
+Route::put('/menu-item/{itemId}', [RestaurantMenuController::class, 'updateMenuItem']);
+Route::post('/menu-item', [RestaurantMenuController::class, 'addMenuItem']);
 
 // Route dla zamówień
 Route::prefix('zamowienia')->group(function () {
@@ -54,3 +60,5 @@ Route::post('/register-restaurant', [RestaurantRegistrationController::class, 's
 Route::get('/restaurant-registrations', [RestaurantRegistrationController::class, 'index']);
 Route::delete('/restaurant-registrations/{id}', [RestaurantRegistrationController::class, 'destroy']);
 Route::post('/restaurant-registrations/accept/{id}', [RestaurantRegistrationController::class, 'acceptRegistration']);
+
+Route::get('/categories', [CategoryController::class, 'getCategories']);

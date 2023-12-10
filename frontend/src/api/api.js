@@ -76,3 +76,27 @@ export const loginSuperAdmin = (credentials) => {
 export const loginAdmin = (credentials) => {
   return apiClient.post('/admin/login', credentials);
 };
+
+export const getRestaurantData = (userId) => {
+  return apiClient.get(`/restaurant-data/${userId}`);
+};
+
+export const updateRestaurantData = (restaurantData) => {
+  return apiClient.put(`/update-restaurant-data`, restaurantData);
+};
+
+export const deleteMenuItem = (itemId) => {
+  return apiClient.delete(`/menu-item/${itemId}`);
+};
+
+export const addMenuItem = (formData) => {
+  return apiClient.post('/menu-item', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+};
+
+export const getCategories = () => {
+  return apiClient.get('/categories');
+};

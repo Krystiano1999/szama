@@ -7,6 +7,8 @@
   
         <li class="sidebar-item"><router-link to="/admin/orders-management" class="sidebar-link">Zarządzanie zamówieniami</router-link></li>
   
+        <li class="sidebar-item"><router-link to="/admin/orders-management" class="sidebar-link">Zarządzanie swoimi danymi</router-link></li>
+  
       </ul>
       <div class="fixed-bottom position-absolute d-flex justify-content-center align-items-center py-3">
         <a role="button" class="btn btn-light" @click="logout">Wyloguj</a>
@@ -23,6 +25,8 @@
         logoutUser()
           .then(() => {
             localStorage.removeItem('token');
+            localStorage.removeItem('restaurant_id');
+            localStorage.removeItem('id');
             this.$router.push('/admin/login');
           })
           .catch(error => {
