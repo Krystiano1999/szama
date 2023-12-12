@@ -35,12 +35,13 @@
       :isVisible="isAddModalVisible"
       @add-item="addItem"
       @close-modal="closeAddModal"
+      @item-added="fetchMenuItems"
     />
   </div>
 </template>
 
 <script>
-import { getRestaurantMenu, deleteMenuItem, addMenuItem } from '@/api/api';
+import { getRestaurantMenu, deleteMenuItem } from '@/api/api';
 import AddMenuItemModal from '@/components/modal/AddMenuItemModal.vue';
 
 export default {
@@ -79,7 +80,8 @@ export default {
     getImageUrl(name) {
       const normalizedName = this.normalizeString(name);
       const normalizedRestaurantName = this.normalizeString(this.restaurantName);
-      return `/images/${normalizedRestaurantName}/${normalizedName}.png`;
+      const localServerUrl = 'http://localhost:8888'; 
+      return `${localServerUrl}/images/${normalizedRestaurantName}/${normalizedName}.png`;
     },
     normalizeString(str) {
       return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
@@ -92,17 +94,14 @@ export default {
           this.menuItems = this.menuItems.filter(item => item.id !== itemId);
           alert('Pozycja menu została usunięta');
         }).catch(error => {
-          console.error("Błąd podczas usuwania pozycji menu:", error);
+          if (error.response && error.response.status === 409) { 
+            alert('Nie można usunąć pozycji menu, ponieważ jest powiązana z zamówieniem.');
+          } else {
+            console.error("Błąd podczas usuwania pozycji menu:", error);
+            alert('Wystąpił błąd podczas usuwania pozycji menu.');
+          }
         });
       }
-    },
-    addItem(item) {
-      addMenuItem({ ...item, ID_Restauracji: this.restaurantId }).then(() => {
-        this.closeAddModal();
-        this.fetchMenuItems(); // Odśwież listę elementów menu
-      }).catch(error => {
-        console.error("Błąd podczas dodawania pozycji menu:", error);
-      });
     },
     // Nowa metoda do znalezienia ID kategorii
     findCategoryId(categoryName) {

@@ -89,11 +89,15 @@ export const deleteMenuItem = (itemId) => {
   return apiClient.delete(`/menu-item/${itemId}`);
 };
 
-export const addMenuItem = (formData) => {
+export const addMenuItem = (itemData, imageFile) => {
+  const formData = new FormData();
+  formData.append('image', imageFile);
+
   return apiClient.post('/menu-item', formData, {
     headers: {
-      'Content-Type': 'multipart/form-data',
+      'Content-Type': 'multipart/form-data'
     },
+    params: itemData // Przekazuje dane jako parametry zapytania
   });
 };
 

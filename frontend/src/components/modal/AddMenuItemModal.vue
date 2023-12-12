@@ -8,7 +8,10 @@
         <select v-model="newItem.kategoria_id" required>
             <option v-for="category in localCategories" :value="category.id" :key="category.id">{{ category.name }}</option>
         </select>
-        <input type="file" @change="handleImageUpload" />
+        <label for="file-upload" class="custom-file-upload">
+          Upload Image
+        </label>
+        <input id="file-upload" name="file-upload" type="file" @change="handleImageUpload" required style="display: none;"/>
         <button type="submit">Add</button>
         <button type="button" @click="closeModal">Cancel</button>
       </form>
@@ -17,7 +20,9 @@
 </template>
 
 <script>
-import { getCategories } from '@/api/api';
+import { getCategories,addMenuItem } from '@/api/api';
+import { showSuccessMessage, showErrorMessage } from '@/components/notification/NotificationHelper';
+
 export default {
   props: {
     categories: Array, 
@@ -25,25 +30,54 @@ export default {
   },
   data() {
     return {
-      newItem: {
+        newItem: {
         name: '',
         price: 0,
-        kategoria_id: null
-      },
-      localCategories: [] 
+        kategoria_id: null,
+        restaurantId: localStorage.getItem('restaurant_id'), 
+        image: null
+        },
+        localCategories: [] 
     };
   },
   methods: {
+     handleImageUpload(event) {
+        this.newItem.image = event.target.files[0];
+    },
     addNewItem() {
-        const menuItemData = {
-            Nazwa_Pozycji: this.newItem.name,
-            Cena: this.newItem.price.replace(',', '.'),
-            kategoria_id: this.newItem.kategoria_id,
-            ID_Restauracji: this.restaurantId
+        const maxFileSize = 1.8 * 1024 * 1024;
+
+        if (this.newItem.image && this.newItem.image.size > maxFileSize) {
+          alert("Rozmiar obrazka musi być mniejszy niż 1.8MB");
+          return;
+        }
+
+        const itemData = {
+          Nazwa_Pozycji: this.newItem.name,
+          Cena: this.newItem.price.replace(',', '.'),
+          kategoria_id: this.newItem.kategoria_id,
+          ID_Restauracji: this.newItem.restaurantId, 
         };
 
-        this.$emit('add-item', menuItemData);
-        this.newItem = { name: '', price: 0, kategoria_id: null };
+        if (this.newItem.image) {
+        addMenuItem(itemData, this.newItem.image)
+            .then(response => {
+              console.log(response);
+              showSuccessMessage("Dodano pozycję Menu");
+              this.closeModal();
+              this.$emit('item-added');
+            })
+            .catch(error => {
+              console.error("Błąd podczas dodawania pozycji menu:", error);
+              if (error.response && error.response.status === 422 && error.response.data.error) {
+                alert(error.response.data.error); 
+              } else {
+                showErrorMessage("Błąd, produkt nie został dodany do bazy, Prosimy spróbuj ponownie później");
+              }
+            });
+        } else {
+          alert('Obrazek jest wymagany');
+        }
     },
     closeModal() {
       this.$emit('close-modal');
@@ -132,5 +166,21 @@ export default {
 
 .modal form button:hover {
   opacity: 0.9;
+}
+
+.custom-file-upload {
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+  background-color: #fff;
+  border: 1px solid #f44336;
+  color:#f44336;
+  border-radius: 4px;
+  margin-bottom: 15px;
+}
+
+.custom-file-upload:hover {
+  background-color: #d32f2f;
+  color: #fff;
 }
 </style>

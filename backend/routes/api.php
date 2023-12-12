@@ -44,7 +44,6 @@ Route::put('/update-restaurant-data', [RestaurantController::class, 'updateResta
 
 Route::get('/restaurant/{restaurantId}/menu', [RestaurantMenuController::class, 'getCategoriesAndMenu']);
 Route::delete('/menu-item/{itemId}', [RestaurantMenuController::class, 'deleteMenuItem']);
-Route::put('/menu-item/{itemId}', [RestaurantMenuController::class, 'updateMenuItem']);
 Route::post('/menu-item', [RestaurantMenuController::class, 'addMenuItem']);
 
 // Route dla zamówień

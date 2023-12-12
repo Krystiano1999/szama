@@ -7,7 +7,7 @@
   
         <li class="sidebar-item"><router-link to="/admin/orders-management" class="sidebar-link">Zarządzanie zamówieniami</router-link></li>
   
-        <li class="sidebar-item"><router-link to="/admin/orders-management" class="sidebar-link">Zarządzanie swoimi danymi</router-link></li>
+        <li class="sidebar-item"><router-link to="/admin/orders-management" class="sidebar-link">Zarządzanie kontem</router-link></li>
   
       </ul>
       <div class="fixed-bottom position-absolute d-flex justify-content-center align-items-center py-3">

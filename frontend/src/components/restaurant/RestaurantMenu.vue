@@ -62,9 +62,9 @@ export default {
     getImageUrl(restaurantName, imageName) {
       const normalizedRestaurantName = this.normalizeString(restaurantName);
       const normalizedImageName = this.normalizeString(imageName);
-      return `/images/${normalizedRestaurantName}/${normalizedImageName}`;
+      const localServerUrl = 'http://localhost:8888'; 
+      return `${localServerUrl}/images/${normalizedRestaurantName}/${normalizedImageName}`;
     },
-
     normalizeString(str) {
       return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
             .toLowerCase()
