@@ -74,7 +74,6 @@ export default {
 
       updateRestaurantData(restaurantData).then(() => {
         showSuccessMessage("Dane restauracji zostały zaktualizowane");
-        // Można dodać powiadomienie o sukcesie
       }).catch(error => {
         console.error("Błąd podczas aktualizacji danych restauracji:", error);
       });

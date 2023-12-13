@@ -7,8 +7,10 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\RestaurantMenuController;
 use App\Http\Controllers\OrderController;
-use App\Http\Controllers\RestaurantRegistrationController ;
-use App\Http\Controllers\CategoryController ;
+use App\Http\Controllers\RestaurantRegistrationController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\UserController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -25,15 +27,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
-
 Route::post('/register', [RegisterController::class, 'register']);
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout']);
 Route::post('/admin/login', [AuthController::class, 'loginAdmin']);
 Route::post('/superadmin/login', [AuthController::class, 'loginSuperAdmin']);
-
 
 Route::post('/get-restaurants-by-city', [RestaurantController::class, 'getRestaurantsByCity']);
 Route::get('/get-restaurants', [RestaurantController::class, 'getRestaurants']);
@@ -46,7 +45,6 @@ Route::get('/restaurant/{restaurantId}/menu', [RestaurantMenuController::class, 
 Route::delete('/menu-item/{itemId}', [RestaurantMenuController::class, 'deleteMenuItem']);
 Route::post('/menu-item', [RestaurantMenuController::class, 'addMenuItem']);
 
-// Route dla zamówień
 Route::prefix('zamowienia')->group(function () {
     Route::get('/', [OrderController::class, 'index']);
     Route::post('/', [OrderController::class, 'store']);
@@ -61,3 +59,5 @@ Route::delete('/restaurant-registrations/{id}', [RestaurantRegistrationControlle
 Route::post('/restaurant-registrations/accept/{id}', [RestaurantRegistrationController::class, 'acceptRegistration']);
 
 Route::get('/categories', [CategoryController::class, 'getCategories']);
+
+Route::put('/user/{id}', [UserController::class, 'update']);

@@ -7,7 +7,7 @@
   
         <li class="sidebar-item"><router-link to="/admin/orders-management" class="sidebar-link">Zarządzanie zamówieniami</router-link></li>
   
-        <li class="sidebar-item"><router-link to="/admin/orders-management" class="sidebar-link">Zarządzanie kontem</router-link></li>
+        <li class="sidebar-item"><router-link to="/admin/account-management" class="sidebar-link">Zarządzanie kontem</router-link></li>
   
       </ul>
       <div class="fixed-bottom position-absolute d-flex justify-content-center align-items-center py-3">
@@ -27,6 +27,9 @@
             localStorage.removeItem('token');
             localStorage.removeItem('restaurant_id');
             localStorage.removeItem('id');
+            localStorage.removeItem('phone_number');
+            localStorage.removeItem('username');
+            localStorage.removeItem('email');
             this.$router.push('/admin/login');
           })
           .catch(error => {

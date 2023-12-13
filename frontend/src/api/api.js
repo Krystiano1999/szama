@@ -104,3 +104,7 @@ export const addMenuItem = (itemData, imageFile) => {
 export const getCategories = () => {
   return apiClient.get('/categories');
 };
+
+export const updateUserData = (userId, userData) => {
+  return apiClient.put(`/user/${userId}`, userData);
+};

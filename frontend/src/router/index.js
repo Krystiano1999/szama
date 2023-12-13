@@ -6,6 +6,7 @@ import AdminPage from '@/views/AdminPage.vue';
 import DashboardComponent from '@/components/admin/DashboardAdmin.vue';
 import MenuManagement from '@/components/admin/MenuManagement.vue';
 import OrdersManagement from '@/components/admin/OrdersManagement.vue';
+import AccountManagement from '@/components/admin/AccountManagement.vue';
 import RegisterRestaurant from '@/components/registration/RegisterRestaurant.vue';
 import NewRestaurantManagement from '@/components/superadmin/NewRestaurantManagement.vue';
 import RestaurantManagement from '@/components/superadmin/RestaurantManagement.vue';
@@ -50,6 +51,7 @@ const routes = [
       { path: 'dashboard', name: 'Dashboard', component: DashboardComponent },
       { path: 'menu-management', name: 'MenuManagement', component: MenuManagement },
       { path: 'orders-management', name: 'OrdersManagement', component: OrdersManagement },
+      { path: 'account-management', name: 'AccountManagement', component: AccountManagement },
     ]
   },
   {
@@ -73,20 +75,26 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem('token');
   const userType = localStorage.getItem('userType'); 
-
   const isAuthenticated = token !== null;
 
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (!isAuthenticated) {
-      next({ name: to.meta.userType === 'admin' ? 'AdminLogin' : 'SuperAdminLogin' });
+      if (to.meta.userType === 'admin') {
+        next({ name: 'AdminLogin' });
+      } else if (to.meta.userType === 'superadmin') {
+        next({ name: 'SuperAdminLogin' });
+      } else {
+        next(false); 
+      }
     } else if (to.meta.userType && to.meta.userType !== userType) {
-      next(false); // Można przekierować na inną stronę błędu
+      next(false); 
     } else {
-      next(); // Użytkownik jest zalogowany i ma odpowiednie uprawnienia
+      next(); 
     }
   } else {
-    next(); // Trasa nie wymaga autentykacji
+    next(); 
   }
 });
+
 
 export default router;

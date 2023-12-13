@@ -31,7 +31,10 @@
                 
                 localStorage.setItem('token', response.data.token);
                 localStorage.setItem('id', response.data.user_id);
+                localStorage.setItem('username', response.data.username);
                 localStorage.setItem('userType', 'admin'); 
+                localStorage.setItem('email', response.data.email); 
+                localStorage.setItem('phone_number', response.data.phone_number); 
               
                 this.$router.push('/admin/dashboard');
             }

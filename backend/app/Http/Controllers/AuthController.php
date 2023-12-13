@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -43,6 +44,8 @@ class AuthController extends Controller
                 'user_id' => $user->id,
                 'username' => $user->username,
                 'token' => $token, 
+                'email' => $user->email, 
+                'phone_number' => $user->phone_number, 
             ]);
         } else {
             return response()->json(['error' => 'Nieprawidłowe dane logowania'], 401);
