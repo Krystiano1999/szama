@@ -48,9 +48,10 @@ Route::post('/menu-item', [RestaurantMenuController::class, 'addMenuItem']);
 Route::prefix('zamowienia')->group(function () {
     Route::get('/', [OrderController::class, 'index']);
     Route::post('/', [OrderController::class, 'store']);
-    Route::get('/{id}', [OrderController::class, 'show']);
-    Route::put('/{id}', [OrderController::class, 'update']);
-    Route::delete('/{id}', [OrderController::class, 'destroy']);
+    Route::get('/restaurant/{restaurantId}', [OrderController::class, 'getOrdersByRestaurant']);
+    Route::put('/{orderId}/status', [OrderController::class, 'updateStatus']);
+    Route::get('/user/{userId}', [OrderController::class, 'getOrdersByUser']);
+
 });
 
 Route::post('/register-restaurant', [RestaurantRegistrationController::class, 'store']);

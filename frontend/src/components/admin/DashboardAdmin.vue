@@ -56,8 +56,6 @@ export default {
         this.restaurant = response.data.restaurant;
         localStorage.setItem('restaurant_id', this.restaurant.ID_Restauracji);
         localStorage.setItem('restaurant_name', this.restaurant.Nazwa_Restauracji);
-        //console.log(this.restaurant);
-        //console.log(localStorage);
       }).catch(error => {
         console.error("Błąd podczas ładowania danych restauracji:", error);
       });

@@ -13,11 +13,16 @@ class Zamowienia extends Model
     protected $primaryKey = 'ID_Zamowienia';
 
     protected $fillable = [
-        'ID_Uzytkownika', 'Status_Zamowienia', 'Cena'
+        'ID_Uzytkownika', 'Status_Zamowienia', 'Cena', 'ID_Restauracji'
     ];
 
     public function szczegoly()
     {
         return $this->hasMany(SzczegolyZamowienia::class, 'zamowienia_id');
+    }
+
+    public function restauracja()
+    {
+        return $this->belongsTo(Restauracje::class, 'ID_Restauracji');
     }
 }

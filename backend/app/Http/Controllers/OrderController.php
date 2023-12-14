@@ -4,14 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Zamowienia;
 use App\Models\SzczegolyZamowienia;
+use App\Models\Menu;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
     public function index()
     {
-        // Pobieranie wszystkich zamówień wraz ze szczegółami
-        return Zamowienia::with('szczegoly')->get();
+        $zamowienia = Zamowienia::with(['szczegoly', 'szczegoly.menu'])->get();
+        return response()->json($zamowienia);
     }
 
     public function store(Request $request)
@@ -19,6 +20,7 @@ class OrderController extends Controller
         // Walidacja danych
         $validatedData = $request->validate([
             'id_uzytkownika' => 'required|integer',
+            'id_restauracji' => 'required|integer',
             'items' => 'required|array',
             'items.*.id_pozycji_menu' => 'required|integer',
             'items.*.ilosc' => 'required|integer',
@@ -28,6 +30,7 @@ class OrderController extends Controller
         // Tworzenie nowego zamówienia
         $zamowienie = new Zamowienia();
         $zamowienie->ID_Uzytkownika = $validatedData['id_uzytkownika'];
+        $zamowienie->ID_Restauracji = $validatedData['id_restauracji'];
         $zamowienie->Status_Zamowienia = 'Nowe'; // Domyślny status
         $zamowienie->Cena = array_sum(array_column($validatedData['items'], 'cena'));
         $zamowienie->save();
@@ -45,44 +48,29 @@ class OrderController extends Controller
         return response()->json($zamowienie->load('szczegoly'), 201);
     }
 
-
-    public function show($id)
+    public function getOrdersByRestaurant($restaurantId)
     {
-        // Pobieranie pojedynczego zamówienia
-        $zamowienie = Zamowienia::with('szczegoly')->find($id);
-
-        if (!$zamowienie) {
-            return response()->json(['message' => 'Zamówienie nie znalezione'], 404);
-        }
-
-        return $zamowienie;
+        $zamowienia = Zamowienia::with(['szczegoly', 'szczegoly.menu'])
+            ->where('ID_Restauracji', $restaurantId)
+            ->get();
+        return response()->json($zamowienia);
     }
 
-    public function update(Request $request, $id)
+    public function updateStatus(Request $request, $orderId)
     {
-        // Aktualizacja zamówienia
-        $zamowienie = Zamowienia::find($id);
+        $zamowienie = Zamowienia::findOrFail($orderId);
+        $zamowienie->Status_Zamowienia = $request->newStatus;
+        $zamowienie->save();
 
-        if (!$zamowienie) {
-            return response()->json(['message' => 'Zamówienie nie znalezione'], 404);
-        }
-
-        $zamowienie->update($request->all());
-
-        return response()->json($zamowienie, 200);
+        return response()->json($zamowienie);
     }
 
-    public function destroy($id)
+    public function getOrdersByUser($userId)
     {
-        // Usuwanie zamówienia
-        $zamowienie = Zamowienia::find($id);
-
-        if (!$zamowienie) {
-            return response()->json(['message' => 'Zamówienie nie znalezione'], 404);
-        }
-
-        $zamowienie->delete();
-
-        return response()->json(['message' => 'Zamówienie usunięte'], 200);
+        $zamowienia = Zamowienia::with(['szczegoly', 'szczegoly.menu'])
+            ->where('ID_Uzytkownika', $userId)
+            ->get();
+        return response()->json($zamowienia);
     }
+
 }

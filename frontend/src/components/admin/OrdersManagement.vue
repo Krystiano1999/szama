@@ -1,81 +1,120 @@
 <template>
-    <div class="orders-management">
-      <h1>Order history</h1>
-      <table>
-        <thead>
-          <tr>
-            <th @click="sort('id')">ID</th>
-            <th @click="sort('payRef')">PayRef</th>
-            <th @click="sort('amount')">Amount</th>
-            <th @click="sort('status')">Status</th>
-            <th @click="sort('dateDelivered')">Date delivered</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="order in sortedOrders" :key="order.id">
-            <td>{{ order.id }}</td>
-            <td>{{ order.payRef }}</td>
-            <td>{{ order.amount }}</td>
-            <td>{{ order.status }}</td>
-            <td>{{ order.dateDelivered }}</td>
-            <td><button @click="changeStatus(order)">Change Status</button></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+  <div class="orders-management pt-5">
+    <h1>Zarządzanie zamówieniami</h1>
+    <table>
+      <thead>
+        <tr>
+          <th @click="sort('ID_Zamowienia')">ID Zamówienia</th>
+          <th>Status</th>
+          <th>Data Utworzenia</th>
+          <th>Szczegóły Zamówienia</th>
+          <th>Całkowita Cena</th>
+          <th>Akcja</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="order in sortedOrders" :key="order.ID_Zamowienia">
+          <td>{{ order.ID_Zamowienia }}</td>
+          <td>{{ order.Status_Zamowienia }}</td>
+          <td>{{ formatDate(order.created_at) }}</td>
+          <td>
+            <ul>
+              <li v-for="detail in order.szczegoly" :key="detail.ID_Szczegolu">
+                {{ detail.menu.Nazwa_Pozycji }} - Ilość: {{ detail.Ilosc }}, Cena: {{ detail.Cena }} zł
+              </li>
+            </ul>
+          </td>
+          <td>{{ order.Cena }} zł</td>
+          <td>
+            <button 
+              @click="changeStatus(order)" 
+              :disabled="order.Status_Zamowienia === 'Zrealizowane'">
+              Zmień Status Zamówienia
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </template>
 
-  
-  <script>
-  export default {
-    name: 'OrdersManagement',
-    data() {
-      return {
-        orders: [
-          { id: '#1', payRef: 'b55qZFeRkB', amount: '9500.00', status: 'pending', dateDelivered: '2023-11-12' },
-          { id: '#2', payRef: 'FzqUoaJhlu', amount: '10400.00', status: 'pending', dateDelivered: '2023-11-12' },
-          // ... inne zamówienia
-        ],
-        currentSort: 'id',
-        currentSortDir: 'asc',
-        statuses: ['pending', 'processing', 'shipped'], // Statusy zamówień
-      };
-    },
-    computed: {
-      sortedOrders() {
-        return this.orders.slice().sort((a, b) => {
-          let modifier = 1;
-          if (this.currentSortDir === 'desc') modifier = -1;
-          if (a[this.currentSort] < b[this.currentSort]) return -1 * modifier;
-          if (a[this.currentSort] > b[this.currentSort]) return 1 * modifier;
-          return 0;
-        });
-      },
-    },
-    methods: {
-      sort() {
-        // ... logika sortowania (bez zmian)
-      },
-      changeStatus(order) {
-        const currentIndex = this.statuses.indexOf(order.status);
-        const nextIndex = (currentIndex + 1) % this.statuses.length;
-        order.status = this.statuses[nextIndex];
-      },
-    },
-  };
 
-  </script>
-  
-  <style>
+<script>
+import { getOrdersByRestaurant, updateOrderStatus } from '@/api/api';
 
- .orders-management {
-  max-width: 800px;
+export default {
+  name: 'OrdersManagement',
+  data() {
+    return {
+      orders: [],
+      currentSort: 'id',
+      currentSortDir: 'asc',
+      statuses: ['Nowe', 'W trakcie', 'Wysłane', 'Zrealizowane'],
+    };
+  },
+  computed: {
+    sortedOrders() {
+      return this.orders.slice().sort((a, b) => {
+        let modifier = 1;
+        if (this.currentSortDir === 'desc') modifier = -1;
+        if (a[this.currentSort] < b[this.currentSort]) return -1 * modifier;
+        if (a[this.currentSort] > b[this.currentSort]) return 1 * modifier;
+        return 0;
+      });
+    },
+  },
+  created() {
+    const restaurantId = localStorage.getItem('restaurant_id');
+    if (restaurantId) {
+      this.fetchOrders(restaurantId);
+    }
+  },
+  methods: {
+    async changeStatus(order) {
+      const currentIndex = this.statuses.indexOf(order.Status_Zamowienia);
+      const nextIndex = (currentIndex + 1) % this.statuses.length;
+      const newStatus = this.statuses[nextIndex];
+      order.Status_Zamowienia = newStatus;
+
+      if(newStatus !== 'Nowe') {
+        try {
+          await updateOrderStatus(order.ID_Zamowienia, { newStatus });
+        } catch (error) {
+          console.error('Error updating order status:', error);
+        }
+      }
+    },
+    formatDate(date) {
+      if (!date) return '';
+      return new Date(date).toLocaleDateString('pl-PL');
+    },
+    sort(sortKey) {
+      if(this.currentSort === sortKey) {
+        this.currentSortDir = this.currentSortDir === 'asc' ? 'desc' : 'asc';
+      } else {
+        this.currentSort = sortKey;
+        this.currentSortDir = 'asc';
+      }
+      this.sortedOrders();
+    },
+    async fetchOrders(restaurantId) {
+      try {
+        const response = await getOrdersByRestaurant(restaurantId);
+        this.orders = response.data;
+      } catch (error) {
+        console.error('Error fetching orders:', error);
+      }
+    },
+  },
+};
+</script>
+
+<style>
+.orders-management {
   margin: auto;
 }
 
 .orders-management h1 {
-  font-size: 24px;
   color: #333;
   padding-bottom: 16px;
 }
@@ -109,5 +148,4 @@
 .orders-management button:hover {
   background-color: #2980b9;
 }
-  </style>
-  
+</style>

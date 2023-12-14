@@ -20,4 +20,9 @@ class SzczegolyZamowienia extends Model
     {
         return $this->belongsTo(Zamowienie::class, 'zamowienia_id');
     }
+
+    public function menu()
+    {
+        return $this->belongsTo(Menu::class, 'ID_Pozycji_Menu');
+    }
 }

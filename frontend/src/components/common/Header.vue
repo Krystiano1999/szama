@@ -11,7 +11,7 @@
         </button>
         <div>
           <div class="collapse navbar-collapse" id="navbarNav">
-             <ul class="navbar-nav">
+            <ul class="navbar-nav">
               <li class="nav-item text-white">
                 <router-link to="/restaurants" class="nav-link text-white">Restauracje</router-link>
               </li>
@@ -23,7 +23,14 @@
                   Witaj, {{ loggedInUser.username }}
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li><a class="dropdown-item" href="#">Profil</a></li>
+                  <li v-for="order in userOrders" :key="order.ID_Zamowienia">
+                    <a class="dropdown-item" href="#">
+                      ID Zamówienia: {{ order.ID_Zamowienia }}, Status: {{ order.Status_Zamowienia }}, Cena: {{ order.Cena }} zł
+                    </a>
+                  </li>
+                  <li v-if="userOrders.length === 0">
+                    <a class="dropdown-item" href="#">Brak zamówień</a>
+                  </li>
                   <li><hr class="dropdown-divider"></li>
                   <li><a class="dropdown-item" href="#" @click="logout">Wyloguj</a></li>
                 </ul>
@@ -39,7 +46,7 @@
 
 <script>
 import LoginModal from '@/components/auth/LoginModal.vue';
-import { logoutUser } from '@/api/api';
+import { logoutUser, getOrdersByUser } from '@/api/api';
 import { showSuccessMessage, showErrorMessage } from '@/components/notification/NotificationHelper';
 
 export default {
@@ -50,12 +57,14 @@ export default {
   data() {
     return {
       loggedInUser: null,
-      messageContent: '',
-      messageType: '',
+      userOrders: [],
     };
   },
   created() {
     this.checkLoginStatus();
+    if (this.loggedInUser) {
+      this.showUserOrders();
+    }
   },
   methods: {
     handleUserLogin(userInfo) {
@@ -63,30 +72,39 @@ export default {
     },
     checkLoginStatus() {
       const token = localStorage.getItem('token');
-      const username = localStorage.getItem('username'); 
+      const username = localStorage.getItem('username');
+      const userId = localStorage.getItem('id');
       if (token && username) {
-        this.loggedInUser = { username };
+        this.loggedInUser = { username, id: userId };
       }
     },
     async logout() {
       try {
-        const response = await logoutUser();
-        console.log(response.data.message); 
+        await logoutUser();
         showSuccessMessage("Pomyślnie wylogowano");
         localStorage.removeItem('token');
         localStorage.removeItem('id');
-        localStorage.removeItem('username'); 
+        localStorage.removeItem('username');
         this.loggedInUser = null;
-        // Przekierowanie do strony głównej, ekranu logowania itp.
         this.$router.push('/');
       } catch (error) {
-        //console.error("Wystąpił błąd podczas wylogowywania:", error.response);
-        showErrorMessage("Wystąpił błąd podczas wylogowywania:", error.response);
+        showErrorMessage("Wystąpił błąd podczas wylogowywania");
+      }
+    },
+    async showUserOrders() {
+      if (!this.loggedInUser || !this.loggedInUser.id) {
+        showErrorMessage("Brak danych o zalogowanym użytkowniku");
+        return;
+      }
+      try {
+        const response = await getOrdersByUser(this.loggedInUser.id);
+        this.userOrders = response.data.filter(order => order.Status_Zamowienia !== 'Zrealizowane');
+      } catch (error) {
+        showErrorMessage("Wystąpił błąd podczas pobierania zamówień");
       }
     }
-    
   }
-}
+};
 </script>
 
 
@@ -98,5 +116,9 @@ export default {
   }
   .logo {
     max-height: 60px;
+  }
+  .dropdown-menu[data-bs-popper]{
+    right: 0;
+    left: auto !important;
   }
 </style>

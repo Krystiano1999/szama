@@ -44,7 +44,6 @@ export default {
       return numberFormat.format(value); 
     },
     removeItem(itemToRemove) {
-      // Metoda do usuwania elementu zamówienia, emituje zdarzenie z nazwą usuwanego elementu
       this.$emit('removeItem', itemToRemove);
     },
     placeOrder() {

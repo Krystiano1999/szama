@@ -97,7 +97,7 @@ export const addMenuItem = (itemData, imageFile) => {
     headers: {
       'Content-Type': 'multipart/form-data'
     },
-    params: itemData // Przekazuje dane jako parametry zapytania
+    params: itemData 
   });
 };
 
@@ -107,4 +107,16 @@ export const getCategories = () => {
 
 export const updateUserData = (userId, userData) => {
   return apiClient.put(`/user/${userId}`, userData);
+};
+
+export const getOrdersByRestaurant = (restaurantId) => {
+  return apiClient.get(`/zamowienia/restaurant/${restaurantId}`);
+};
+
+export const updateOrderStatus = (orderId, statusData) => {
+  return apiClient.put(`/zamowienia/${orderId}/status`, statusData);
+};
+
+export const getOrdersByUser = (userId) => {
+  return apiClient.get(`/zamowienia/user/${userId}`);
 };
