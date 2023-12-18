@@ -74,27 +74,26 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem('token');
-  const userType = localStorage.getItem('userType'); 
+  const userType = localStorage.getItem('userType');
   const isAuthenticated = token !== null;
 
-  if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (!isAuthenticated) {
-      if (to.meta.userType === 'admin') {
-        next({ name: 'AdminLogin' });
-      } else if (to.meta.userType === 'superadmin') {
-        next({ name: 'SuperAdminLogin' });
-      } else {
-        next(false); 
-      }
-    } else if (to.meta.userType && to.meta.userType !== userType) {
-      next(false); 
-    } else {
-      next(); 
-    }
+  const numericUserType = parseInt(userType, 10);
+
+  if (to.meta.requiresAuth && !isAuthenticated) {
+    next('/'); // Brak autoryzacji
+  } else if (to.meta.userType === 'admin' && numericUserType !== 1) {
+    next('/'); // Przekierowanie, jeśli nie jest adminem
+  } else if (to.meta.userType === 'superadmin' && numericUserType !== 2) {
+    next('/'); // Przekierowanie, jeśli nie jest superadminem
   } else {
-    next(); 
+    next(); // Kontynuuj, jeśli wszystkie warunki są spełnione
   }
 });
+
+
+
+
+
 
 
 export default router;

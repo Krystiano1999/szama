@@ -29,7 +29,7 @@ export default {
   border-radius: 25px;
   text-align: center;
   min-width: 300px;
-  z-index: 1000;
+  z-index: 9999999999999999999999;
   font-size: 25px;
   font-weight:600;
 }

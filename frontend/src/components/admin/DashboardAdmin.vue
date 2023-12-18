@@ -52,6 +52,7 @@ export default {
   methods: {
     fetchRestaurantData() {
       const userId = localStorage.getItem('id');
+      console.log(localStorage);
       getRestaurantData(userId).then(response => {
         this.restaurant = response.data.restaurant;
         localStorage.setItem('restaurant_id', this.restaurant.ID_Restauracji);

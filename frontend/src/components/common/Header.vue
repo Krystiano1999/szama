@@ -68,7 +68,20 @@ export default {
   },
   methods: {
     handleUserLogin(userInfo) {
-      this.loggedInUser = userInfo;
+      this.loggedInUser = {
+        username: localStorage.getItem('username'),
+        id: localStorage.getItem('id')
+      };
+
+      this.showUserOrders();
+
+      if (userInfo.userType === '0') {
+        this.$router.push('/restaurants');
+      } else if (userInfo.userType === '1') {
+        this.$router.push('/admin/dashboard');
+      } else if (userInfo.userType === '2') {
+        this.$router.push('/superadmin/new-restaurant-management');
+      }
     },
     checkLoginStatus() {
       const token = localStorage.getItem('token');
@@ -85,6 +98,9 @@ export default {
         localStorage.removeItem('token');
         localStorage.removeItem('id');
         localStorage.removeItem('username');
+        localStorage.removeItem('userType');
+        localStorage.removeItem('email');
+        localStorage.removeItem('phone_number');
         this.loggedInUser = null;
         this.$router.push('/');
       } catch (error) {
@@ -92,7 +108,7 @@ export default {
       }
     },
     async showUserOrders() {
-      if (!this.loggedInUser || !this.loggedInUser.id) {
+      if (!this.loggedInUser && !this.loggedInUser.id) {
         showErrorMessage("Brak danych o zalogowanym użytkowniku");
         return;
       }

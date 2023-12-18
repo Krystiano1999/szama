@@ -46,6 +46,7 @@ class AuthController extends Controller
                 'token' => $token, 
                 'email' => $user->email, 
                 'phone_number' => $user->phone_number, 
+                'user_type' => $user->user_type, 
             ]);
         } else {
             return response()->json(['error' => 'Nieprawidłowe dane logowania'], 401);

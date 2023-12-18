@@ -37,6 +37,9 @@
            <div class="modal-footer">
             <button type="button" class="btn btn-link" @click="toggleMode">{{ isLoginMode ? 'Załóż konto' : 'Masz już konto? Zaloguj się' }}</button>
           </div>
+          <div class="modal-footer text-end">
+            <router-link class="text-end" to="/register-restaurant">Chcesz umieścić u nas swoją firmę?<br> Zarejestruj restaurację</router-link>
+          </div>
         </div>
       </div>
     </div>
@@ -59,7 +62,7 @@ export default {
         phone_number:'',
         address: '',
         password:'',
-        user_type: 0, //domyślnie dla usera bez uprawnien
+        user_type: 0, 
       },
       alert: null
     };
@@ -71,17 +74,23 @@ export default {
     loginUser() {
       loginUser(this.formData)
         .then(response => {
-          console.log(response.data);
           localStorage.setItem('token', response.data.token);
+          localStorage.setItem('userType', response.data.user_type.toString());
           localStorage.setItem('id', response.data.user_id);
           localStorage.setItem('username', response.data.username);
-          showSuccessMessage("Zalogowano");
+          localStorage.setItem('email', response.data.email); 
+          localStorage.setItem('phone_number', response.data.phone_number); 
+
           this.closeModalDirectly();
-          this.$emit('user-logged-in', { username: response.data.username });
+
+          this.$emit('user-logged-in', {
+            userType: response.data.user_type.toString()
+          });
+
+          showSuccessMessage("Zalogowano");
         })
         .catch(error => {
           console.error(error.response.data);
-          // Obsługa błędu
           showErrorMessage(error.response.data);
         });
     },
@@ -91,11 +100,9 @@ export default {
           console.log(response.data);
           showSuccessMessage("Zarejestrowano");
           this.closeModalDirectly();
-          // Obsługa sukcesu
         })
         .catch(error => {
           console.error(error.response.data);
-          // Obsługa błędu
           showErrorMessage(error.response.data);
         });
     },
