@@ -26,11 +26,11 @@
           </td>
           <td>{{ order.Cena }} zł</td>
           <td>
-            <button 
-              @click="changeStatus(order)" 
-              :disabled="order.Status_Zamowienia === 'Zrealizowane'">
-              Zmień Status Zamówienia
-            </button>
+            <select v-model="order.Status_Zamowienia" @change="changeStatus(order)">
+              <option v-for="status in statuses" :key="status" :value="status">
+                {{ status }}
+              </option>
+            </select>
           </td>
         </tr>
       </tbody>
@@ -41,6 +41,7 @@
 
 <script>
 import { getOrdersByRestaurant, updateOrderStatus } from '@/api/api';
+import { showSuccessMessage } from '@/components/notification/NotificationHelper';
 
 export default {
   name: 'OrdersManagement',
@@ -71,17 +72,11 @@ export default {
   },
   methods: {
     async changeStatus(order) {
-      const currentIndex = this.statuses.indexOf(order.Status_Zamowienia);
-      const nextIndex = (currentIndex + 1) % this.statuses.length;
-      const newStatus = this.statuses[nextIndex];
-      order.Status_Zamowienia = newStatus;
-
-      if(newStatus !== 'Nowe') {
-        try {
-          await updateOrderStatus(order.ID_Zamowienia, { newStatus });
-        } catch (error) {
-          console.error('Error updating order status:', error);
-        }
+      try {
+        await updateOrderStatus(order.ID_Zamowienia, { newStatus: order.Status_Zamowienia });
+        showSuccessMessage("Pomyślnie zaktualizowano status zamówienia");
+      } catch (error) {
+        console.error('Błąd zmiany statusu zamówienia: ', error);
       }
     },
     formatDate(date) {
@@ -148,4 +143,29 @@ export default {
 .orders-management button:hover {
   background-color: #2980b9;
 }
+
+.orders-management select {
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  background-color: white;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+
+.orders-management select:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+.orders-management select:hover {
+  border-color: #2980b9;
+}
+
+.orders-management select:disabled {
+  background-color: #f9f9f9;
+  color: #ccc;
+  cursor: not-allowed;
+}
+
 </style>
