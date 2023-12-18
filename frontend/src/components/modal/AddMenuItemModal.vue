@@ -2,16 +2,20 @@
   <div class="modal-overlay" v-show="isVisible">
     <div class="modal">
       <h3>Add Menu Item</h3>
-      <form @submit.prevent="addNewItem">
-        <input type="text" v-model="newItem.name" placeholder="Name" required>
-        <input type="text" v-model="newItem.price" @input="validatePrice" placeholder="Price" required>
+      <form class="text-start" @submit.prevent="addNewItem">
+        Nazwa pozycji
+        <input type="text" v-model="newItem.name" placeholder="Nazwa pozycji" required>
+        Cena
+        <input type="text" v-model="newItem.price" @input="validatePrice" placeholder="Cena (np. 12.99)" required>
+        Kategoria
         <select v-model="newItem.kategoria_id" required>
+            <option disabled value="">Wybierz kategorię</option>
             <option v-for="category in localCategories" :value="category.id" :key="category.id">{{ category.name }}</option>
         </select>
         <label for="file-upload" class="custom-file-upload">
-          Upload Image
+            {{ uploadedImageName || "Wybierz obrazek (JPG, PNG)" }}
         </label>
-        <input id="file-upload" name="file-upload" type="file" @change="handleImageUpload" required style="display: none;"/>
+        <input id="file-upload" name="file-upload" type="file" @change="handleImageUpload" accept=".jpg, .jpeg, .png" required style="display: none;"/>
         <button type="submit">Add</button>
         <button type="button" @click="closeModal">Cancel</button>
       </form>
@@ -31,24 +35,29 @@ export default {
   data() {
     return {
         newItem: {
-        name: '',
-        price: 0,
-        kategoria_id: null,
-        restaurantId: localStorage.getItem('restaurant_id'), 
-        image: null
+          name: '',
+          price: 0,
+          kategoria_id: null,
+          restaurantId: localStorage.getItem('restaurant_id'), 
+          image: null
         },
-        localCategories: [] 
+        localCategories: [],
+        uploadedImageName: null,
     };
   },
   methods: {
-     handleImageUpload(event) {
-        this.newItem.image = event.target.files[0];
+    handleImageUpload(event) {
+      const file = event.target.files[0];
+      if (file) {
+        this.newItem.image = file;
+        this.uploadedImageName = file.name; 
+      }
     },
     addNewItem() {
-        const maxFileSize = 1.8 * 1024 * 1024;
+        const maxFileSize = 1.85 * 1024 * 1024;
 
         if (this.newItem.image && this.newItem.image.size > maxFileSize) {
-          alert("Rozmiar obrazka musi być mniejszy niż 1.8MB");
+          alert("Rozmiar obrazka musi być mniejszy niż 1.85MB zoptymalizuj swoje grafiki na stronie: https://tinypng.com/");
           return;
         }
 

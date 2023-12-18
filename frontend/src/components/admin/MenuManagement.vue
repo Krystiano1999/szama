@@ -7,11 +7,11 @@
       <thead>
         <tr>
           <th>ID</th>
-          <th>Image</th>
-          <th>Name</th>
-          <th>Category</th>
-          <th>Price</th>
-          <th>Action</th>
+          <th>Obraz</th>
+          <th>Nazwa</th>
+          <th>Kategoria</th>
+          <th>Cena</th>
+          <th>Usuń</th>
         </tr>
       </thead>
       <tbody>
