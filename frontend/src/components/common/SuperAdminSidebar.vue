@@ -4,7 +4,7 @@
       <ul class="sidebar-list">
         <li class="sidebar-item"><router-link to="/superadmin/new-restaurant-management" class="sidebar-link">Zarządzanie rejestracjami restauracji</router-link></li>
   
-        <li class="sidebar-item"><router-link to="/superadmin/restaurant-management" class="sidebar-link">Zarządzanie kategoriami</router-link></li>
+        <li class="sidebar-item"><router-link to="/superadmin/restaurant-management" class="sidebar-link">Zarządzanie resturacjami</router-link></li>
       </ul>
       <div class="fixed-bottom position-absolute d-flex justify-content-center align-items-center py-3">
         <a role="button" class="btn btn-light" @click="logout">Wyloguj</a>
@@ -21,7 +21,12 @@
         logoutUser()
           .then(() => {
             localStorage.removeItem('token');
-            this.$router.push('/superadmin/login');
+            localStorage.removeItem('id');
+            localStorage.removeItem('username');
+            localStorage.removeItem('userType');
+            localStorage.removeItem('email');
+            localStorage.removeItem('phone_number');
+            this.$router.push('/');
           })
           .catch(error => {
             console.error("Błąd wylogowania:", error);

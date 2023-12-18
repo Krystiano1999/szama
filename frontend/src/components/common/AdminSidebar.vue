@@ -30,7 +30,7 @@
             localStorage.removeItem('phone_number');
             localStorage.removeItem('username');
             localStorage.removeItem('email');
-            this.$router.push('/admin/login');
+            this.$router.push('/');
           })
           .catch(error => {
             console.error("Błąd wylogowania:", error);

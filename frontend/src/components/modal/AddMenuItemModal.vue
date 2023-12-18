@@ -85,7 +85,7 @@ export default {
               }
             });
         } else {
-          alert('Obrazek jest wymagany');
+          alert('Obrazek jest wymagany, pamiętaj że jedyne obsługiwane formaty to .jpg i .png');
         }
     },
     closeModal() {
